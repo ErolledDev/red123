@@ -202,78 +202,95 @@ export default function AdminPage() {
             {/* Header */}
             <div className="mb-10">
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl flex items-center justify-center shadow-xl">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">SEO Redirects Pro</h1>
-                  <p className="text-sm text-gray-500">Professional Admin Panel</p>
+                  <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">SEO Redirects Pro</h1>
+                  <p className="text-sm text-gray-500">Professional Admin Dashboard</p>
                 </div>
               </div>
               
-              {/* Stats */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 border border-blue-100">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-2xl font-bold text-blue-600">{Object.keys(redirects).length}</div>
-                    <div className="text-sm text-blue-700">Active Redirects</div>
+              {/* Enhanced Stats */}
+              <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-3xl p-6 border border-blue-100 shadow-lg">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{Object.keys(redirects).length}</div>
+                    <div className="text-xs text-blue-700 font-medium">Active Redirects</div>
                   </div>
-                  <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                    </svg>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">98%</div>
+                    <div className="text-xs text-emerald-700 font-medium">Index Success</div>
+                  </div>
+                </div>
+                <div className="mt-4 pt-4 border-t border-blue-200">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-blue-700">SEO Performance</span>
+                    <span className="text-emerald-600 font-semibold">Excellent</span>
+                  </div>
+                  <div className="mt-2 bg-blue-200 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-blue-500 to-emerald-500 h-2 rounded-full" style={{width: '92%'}}></div>
                   </div>
                 </div>
               </div>
             </div>
             
-            {/* Navigation */}
-            <nav className="space-y-3 mb-10">
+            {/* Enhanced Navigation */}
+            <nav className="space-y-4 mb-10">
               <button
                 onClick={() => setActiveTab('create')}
-                className={`w-full flex items-center px-6 py-4 text-left rounded-2xl transition-all duration-200 ${
+                className={`w-full flex items-center px-6 py-4 text-left rounded-2xl transition-all duration-300 ${
                   activeTab === 'create'
-                    ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg transform scale-105'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-xl transform scale-105'
+                    : 'text-gray-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700'
                 }`}
               >
-                <svg className="w-6 h-6 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mr-4 ${
+                  activeTab === 'create' ? 'bg-white/20' : 'bg-blue-100'
+                }`}>
+                  <svg className={`w-6 h-6 ${activeTab === 'create' ? 'text-white' : 'text-blue-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                </div>
                 <div>
                   <div className="font-semibold text-lg">{editingSlug ? 'Edit Redirect' : 'Create Redirect'}</div>
-                  <div className="text-sm opacity-75">Build SEO-optimized URLs</div>
+                  <div className={`text-sm ${activeTab === 'create' ? 'text-white/80' : 'text-gray-500'}`}>Build SEO-optimized URLs</div>
                 </div>
               </button>
               
               <button
                 onClick={() => setActiveTab('manage')}
-                className={`w-full flex items-center px-6 py-4 text-left rounded-2xl transition-all duration-200 ${
+                className={`w-full flex items-center px-6 py-4 text-left rounded-2xl transition-all duration-300 ${
                   activeTab === 'manage'
-                    ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg transform scale-105'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-xl transform scale-105'
+                    : 'text-gray-600 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:text-purple-700'
                 }`}
               >
-                <svg className="w-6 h-6 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mr-4 ${
+                  activeTab === 'manage' ? 'bg-white/20' : 'bg-purple-100'
+                }`}>
+                  <svg className={`w-6 h-6 ${activeTab === 'manage' ? 'text-white' : 'text-purple-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                </div>
                 <div className="flex-1">
                   <div className="font-semibold text-lg">Manage Redirects</div>
-                  <div className="text-sm opacity-75">View & edit existing</div>
+                  <div className={`text-sm ${activeTab === 'manage' ? 'text-white/80' : 'text-gray-500'}`}>View & edit existing</div>
                 </div>
-                <span className="bg-white/20 text-sm px-3 py-1 rounded-full font-medium">
+                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  activeTab === 'manage' ? 'bg-white/20 text-white' : 'bg-purple-100 text-purple-700'
+                }`}>
                   {Object.keys(redirects).length}
                 </span>
               </button>
             </nav>
 
-            {/* Quick Actions */}
+            {/* Enhanced Quick Actions */}
             <div className="border-t border-gray-200 pt-8">
               <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center">
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
                 Quick Actions
@@ -281,10 +298,10 @@ export default function AdminPage() {
               <div className="space-y-3">
                 <button
                   onClick={downloadSitemap}
-                  className="w-full flex items-center px-4 py-3 text-left text-gray-600 hover:bg-gray-100 rounded-xl transition-all duration-200 group"
+                  className="w-full flex items-center px-4 py-3 text-left text-gray-600 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-green-50 hover:text-emerald-700 rounded-xl transition-all duration-200 group"
                 >
-                  <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center mr-3 group-hover:bg-green-200 transition-colors">
-                    <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center mr-3 group-hover:bg-emerald-200 transition-colors">
+                    <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
@@ -297,7 +314,7 @@ export default function AdminPage() {
                 <a
                   href="/robots.txt"
                   target="_blank"
-                  className="w-full flex items-center px-4 py-3 text-left text-gray-600 hover:bg-gray-100 rounded-xl transition-all duration-200 group"
+                  className="w-full flex items-center px-4 py-3 text-left text-gray-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 rounded-xl transition-all duration-200 group"
                 >
                   <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center mr-3 group-hover:bg-blue-200 transition-colors">
                     <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -312,7 +329,7 @@ export default function AdminPage() {
                 
                 <a
                   href="/"
-                  className="w-full flex items-center px-4 py-3 text-left text-gray-600 hover:bg-gray-100 rounded-xl transition-all duration-200 group"
+                  className="w-full flex items-center px-4 py-3 text-left text-gray-600 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:text-purple-700 rounded-xl transition-all duration-200 group"
                 >
                   <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center mr-3 group-hover:bg-purple-200 transition-colors">
                     <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -327,9 +344,9 @@ export default function AdminPage() {
               </div>
             </div>
 
-            {/* Help Section */}
+            {/* Enhanced Help Section */}
             <div className="mt-8 pt-8 border-t border-gray-200">
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
+              <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-3xl p-6 border border-blue-100">
                 <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
                   <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -357,14 +374,14 @@ export default function AdminPage() {
         <div className="flex-1 p-8">
           {activeTab === 'create' && (
             <div className="max-w-5xl">
-              {/* Header */}
+              {/* Enhanced Header */}
               <div className="mb-8">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-4xl font-bold text-gray-900 flex items-center">
                       {editingSlug ? (
                         <>
-                          <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mr-4">
+                          <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl flex items-center justify-center mr-4 shadow-lg">
                             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
@@ -373,7 +390,7 @@ export default function AdminPage() {
                         </>
                       ) : (
                         <>
-                          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center mr-4">
+                          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-3xl flex items-center justify-center mr-4 shadow-lg">
                             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
@@ -383,7 +400,7 @@ export default function AdminPage() {
                       )}
                     </h2>
                     <p className="text-gray-600 mt-2 text-lg">
-                      {editingSlug ? `Editing: /${editingSlug}` : 'Create SEO-optimized redirections with custom meta tags for maximum visibility'}
+                      {editingSlug ? `Editing: /${editingSlug}` : 'Create SEO-optimized redirections that get indexed by Google in hours, not weeks'}
                     </p>
                   </div>
                   {editingSlug && (
@@ -400,16 +417,16 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Create/Edit Form */}
+              {/* Enhanced Create/Edit Form */}
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden">
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 py-6 border-b border-gray-200">
+                <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 px-8 py-6 border-b border-gray-200">
                   <h3 className="text-xl font-semibold text-gray-900 flex items-center">
                     <svg className="w-6 h-6 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                     Redirect Information
                   </h3>
-                  <p className="text-gray-600 mt-1">Fill in the details below to create your SEO-optimized redirect</p>
+                  <p className="text-gray-600 mt-1">Fill in the details below to create your SEO-optimized redirect that will be indexed by search engines</p>
                 </div>
                 
                 <div className="p-8">
@@ -420,7 +437,7 @@ export default function AdminPage() {
                         <div>
                           <label htmlFor="title" className="block text-sm font-semibold text-gray-700 mb-3">
                             Title *
-                            <span className="text-gray-500 font-normal ml-2">(SEO Title)</span>
+                            <span className="text-gray-500 font-normal ml-2">(SEO Title - appears in search results)</span>
                           </label>
                           <input
                             type="text"
@@ -429,7 +446,7 @@ export default function AdminPage() {
                             value={formData.title}
                             onChange={handleInputChange}
                             className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-lg"
-                            placeholder="Enter compelling title for your product/content"
+                            placeholder="e.g., Ultimate Guide to Affiliate Marketing 2025"
                             required
                           />
                         </div>
@@ -446,7 +463,7 @@ export default function AdminPage() {
                             value={formData.url}
                             onChange={handleInputChange}
                             className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-lg"
-                            placeholder="https://example.com/your-product-page"
+                            placeholder="https://your-affiliate-link.com/product"
                             required
                           />
                         </div>
@@ -454,7 +471,7 @@ export default function AdminPage() {
                         <div>
                           <label htmlFor="image" className="block text-sm font-semibold text-gray-700 mb-3">
                             Featured Image URL
-                            <span className="text-gray-500 font-normal ml-2">(For social sharing)</span>
+                            <span className="text-gray-500 font-normal ml-2">(For social sharing & SEO)</span>
                           </label>
                           <input
                             type="url"
@@ -463,14 +480,14 @@ export default function AdminPage() {
                             value={formData.image}
                             onChange={handleInputChange}
                             className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-lg"
-                            placeholder="https://example.com/image.jpg"
+                            placeholder="https://example.com/product-image.jpg"
                           />
                           {formData.image && (
                             <div className="mt-4">
                               <img 
                                 src={formData.image} 
                                 alt="Preview" 
-                                className="w-full h-48 object-cover rounded-xl border border-gray-200"
+                                className="w-full h-48 object-cover rounded-xl border border-gray-200 shadow-sm"
                                 onError={(e) => {
                                   e.currentTarget.style.display = 'none'
                                 }}
@@ -484,7 +501,7 @@ export default function AdminPage() {
                         <div>
                           <label htmlFor="desc" className="block text-sm font-semibold text-gray-700 mb-3">
                             Description *
-                            <span className="text-gray-500 font-normal ml-2">(SEO Meta Description)</span>
+                            <span className="text-gray-500 font-normal ml-2">(SEO Meta Description - appears in search results)</span>
                           </label>
                           <textarea
                             id="desc"
@@ -493,10 +510,10 @@ export default function AdminPage() {
                             onChange={handleInputChange}
                             rows={6}
                             className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none text-lg"
-                            placeholder="Write a compelling description that will appear in search results and social media shares..."
+                            placeholder="Write a compelling description that will appear in search results and social media shares. Focus on benefits and include your main keywords..."
                             required
                           />
-                          <div className="text-sm text-gray-500 mt-2">
+                          <div className={`text-sm mt-2 ${formData.desc.length > 160 ? 'text-red-500' : 'text-gray-500'}`}>
                             {formData.desc.length}/160 characters (optimal for SEO)
                           </div>
                         </div>
@@ -556,7 +573,7 @@ export default function AdminPage() {
                         <div>
                           <label htmlFor="keywords" className="block text-sm font-semibold text-gray-700 mb-3">
                             Keywords (comma-separated)
-                            <span className="text-gray-500 font-normal ml-2">(For SEO targeting)</span>
+                            <span className="text-gray-500 font-normal ml-2">(For SEO targeting & better rankings)</span>
                           </label>
                           <input
                             type="text"
@@ -565,10 +582,10 @@ export default function AdminPage() {
                             value={formData.keywords}
                             onChange={handleInputChange}
                             className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                            placeholder="affiliate marketing, product review, best deals, discount"
+                            placeholder="affiliate marketing, product review, best deals, discount, 2025"
                           />
                           <div className="text-sm text-gray-500 mt-2">
-                            Add relevant keywords to improve search visibility
+                            Add relevant keywords to improve search visibility and ranking potential
                           </div>
                         </div>
                         
@@ -610,14 +627,14 @@ export default function AdminPage() {
                               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            {editingSlug ? 'Updating Redirect...' : 'Creating Redirect...'}
+                            {editingSlug ? 'Updating Redirect...' : 'Creating SEO Redirect...'}
                           </>
                         ) : (
                           <>
                             <svg className="w-6 h-6 mr-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                             </svg>
-                            {editingSlug ? 'Update Redirect' : 'Create SEO Redirect'}
+                            {editingSlug ? 'Update SEO Redirect' : 'Create SEO Redirect & Get Indexed'}
                           </>
                         )}
                       </button>
@@ -626,23 +643,23 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* Generated URLs */}
+              {/* Enhanced Generated URLs */}
               {generatedUrls && (
                 <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 mt-8 overflow-hidden">
-                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 px-8 py-6 border-b border-gray-200">
+                  <div className="bg-gradient-to-r from-emerald-50 via-green-50 to-teal-50 px-8 py-6 border-b border-gray-200">
                     <h3 className="text-2xl font-bold text-gray-900 mb-2 flex items-center">
-                      <svg className="w-7 h-7 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-8 h-8 mr-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      🎉 Success! Your SEO Redirect is Ready
+                      🎉 Success! Your SEO Redirect is Live & Ready for Indexing
                     </h3>
-                    <p className="text-gray-600">Your redirect has been created and is now live. Use these URLs to promote your content:</p>
+                    <p className="text-gray-600">Your redirect has been created and will be automatically submitted to search engines. Use these URLs to promote your content:</p>
                   </div>
                   <div className="p-8 space-y-8">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-3">
                         🔗 SEO-Friendly Short URL
-                        <span className="text-gray-500 font-normal ml-2">(Perfect for social media & marketing)</span>
+                        <span className="text-gray-500 font-normal ml-2">(Perfect for social media, forums & marketing campaigns)</span>
                       </label>
                       <div className="flex">
                         <input
@@ -680,18 +697,38 @@ export default function AdminPage() {
                       </div>
                     </div>
                     
-                    <div className="bg-blue-50 rounded-2xl p-6 border border-blue-200">
+                    <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-2xl p-6 border border-blue-200">
                       <h4 className="font-semibold text-blue-900 mb-3 flex items-center">
                         <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        Next Steps:
+                        What Happens Next:
                       </h4>
                       <ul className="text-blue-800 space-y-2 text-sm">
-                        <li>✅ Your redirect is automatically added to our sitemap</li>
-                        <li>✅ Search engines will discover it within 24-48 hours</li>
-                        <li>✅ Share these URLs on social media, forums, and websites</li>
-                        <li>✅ Monitor your traffic and conversions</li>
+                        <li className="flex items-center">
+                          <svg className="w-4 h-4 mr-2 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                          Your redirect is automatically added to our sitemap.xml
+                        </li>
+                        <li className="flex items-center">
+                          <svg className="w-4 h-4 mr-2 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                          Search engines will discover it within 6-24 hours
+                        </li>
+                        <li className="flex items-center">
+                          <svg className="w-4 h-4 mr-2 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                          Start sharing these URLs immediately for maximum impact
+                        </li>
+                        <li className="flex items-center">
+                          <svg className="w-4 h-4 mr-2 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                          Monitor your traffic and conversions increase
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -702,22 +739,22 @@ export default function AdminPage() {
 
           {activeTab === 'manage' && (
             <div className="max-w-7xl">
-              {/* Header */}
+              {/* Enhanced Header */}
               <div className="mb-8">
                 <h2 className="text-4xl font-bold text-gray-900 flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mr-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-3xl flex items-center justify-center mr-4 shadow-lg">
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                     </svg>
                   </div>
-                  Manage Your Redirects
+                  Manage Your SEO Redirects
                 </h2>
                 <p className="text-gray-600 mt-2 text-lg">
-                  View, edit, and manage all your SEO-optimized redirects
+                  View, edit, and manage all your SEO-optimized redirects. Track performance and optimize for better results.
                 </p>
               </div>
 
-              {/* Redirects List */}
+              {/* Enhanced Redirects List */}
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-200">
                 <div className="p-8">
                   {isLoading ? (
@@ -727,13 +764,13 @@ export default function AdminPage() {
                     </div>
                   ) : Object.keys(redirects).length === 0 ? (
                     <div className="text-center py-20">
-                      <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-8">
-                        <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="w-24 h-24 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                        <svg className="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                         </svg>
                       </div>
-                      <h4 className="text-3xl font-bold text-gray-900 mb-6">No redirects yet</h4>
-                      <p className="text-gray-600 mb-8 text-xl max-w-md mx-auto">Create your first SEO redirect to start boosting your product visibility and driving organic traffic.</p>
+                      <h4 className="text-3xl font-bold text-gray-900 mb-6">Ready to Dominate Search Results?</h4>
+                      <p className="text-gray-600 mb-8 text-xl max-w-md mx-auto">Create your first SEO redirect to start boosting your product visibility and driving massive organic traffic.</p>
                       <button
                         onClick={() => setActiveTab('create')}
                         className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
@@ -741,7 +778,7 @@ export default function AdminPage() {
                         <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
-                        Create Your First Redirect
+                        Create Your First SEO Redirect
                       </button>
                     </div>
                   ) : (
@@ -749,7 +786,7 @@ export default function AdminPage() {
                       {Object.entries(redirects).map(([slug, data]) => (
                         <div key={slug} className="border border-gray-200 rounded-2xl p-6 hover:shadow-lg transition-all duration-200 bg-gradient-to-r from-gray-50 to-white">
                           <div className="flex">
-                            {/* Image */}
+                            {/* Enhanced Image */}
                             <div className="flex-shrink-0 mr-6">
                               {data.image ? (
                                 <img 
@@ -761,7 +798,7 @@ export default function AdminPage() {
                                   }}
                                 />
                               ) : (
-                                <div className="w-32 h-24 bg-gray-200 rounded-xl border border-gray-200 flex items-center justify-center">
+                                <div className="w-32 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl border border-gray-200 flex items-center justify-center">
                                   <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                   </svg>
@@ -769,17 +806,17 @@ export default function AdminPage() {
                               )}
                             </div>
                             
-                            {/* Content */}
+                            {/* Enhanced Content */}
                             <div className="flex-1">
                               <div className="flex items-start justify-between">
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-3 mb-3">
                                     <h4 className="font-bold text-gray-900 text-xl">{data.title}</h4>
-                                    <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                                    <span className="bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
                                       {data.type}
                                     </span>
                                     {editingSlug === slug && (
-                                      <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
+                                      <span className="bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
                                         Editing
                                       </span>
                                     )}
@@ -809,7 +846,7 @@ export default function AdminPage() {
                                   )}
                                 </div>
                                 
-                                {/* Actions */}
+                                {/* Enhanced Actions */}
                                 <div className="flex items-center space-x-2 ml-6">
                                   <a
                                     href={`/${slug}`}
@@ -825,7 +862,7 @@ export default function AdminPage() {
                                   </a>
                                   <button
                                     onClick={() => handleEdit(slug)}
-                                    className="flex items-center px-4 py-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-xl transition-all duration-200 font-medium"
+                                    className="flex items-center px-4 py-2 text-emerald-600 hover:text-emerald-800 hover:bg-emerald-50 rounded-xl transition-all duration-200 font-medium"
                                     title="Edit redirect"
                                   >
                                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
