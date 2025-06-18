@@ -4,7 +4,7 @@ import SocialShare from '../../components/SocialShare'
 import RelatedPosts from '../../components/RelatedPosts'
 import SimpleHeader from '../../components/SimpleHeader'
 import SimpleFooter from '../../components/SimpleFooter'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 interface RedirectData {
   title: string
@@ -23,16 +23,27 @@ interface Props {
 }
 
 export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Props) {
-  const currentUrl = typeof window !== 'undefined' ? window.location.href : ''
+  const [currentUrl, setCurrentUrl] = useState('')
+  const [isClient, setIsClient] = useState(false)
   const hashtags = data.keywords ? data.keywords.split(',').map(k => k.trim()) : []
 
-  // Update document title to match the fixed format
+  // Handle client-side mounting
   useEffect(() => {
-    document.title = `${data.title} | seo360`
-  }, [data.title])
+    setIsClient(true)
+    setCurrentUrl(window.location.href)
+  }, [])
+
+  // Update document title only on client side
+  useEffect(() => {
+    if (isClient) {
+      document.title = `${data.title} | seo360`
+    }
+  }, [data.title, isClient])
 
   const continueReading = () => {
-    window.location.href = data.url
+    if (typeof window !== 'undefined') {
+      window.location.href = data.url
+    }
   }
 
   return (
@@ -123,16 +134,18 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
             </div>
           </div>
 
-          {/* Social Share */}
-          <div className="mb-12">
-            <SocialShare
-              url={currentUrl}
-              title={data.title}
-              description={data.desc}
-              image={data.image}
-              hashtags={hashtags}
-            />
-          </div>
+          {/* Social Share - Only render on client */}
+          {isClient && (
+            <div className="mb-12">
+              <SocialShare
+                url={currentUrl}
+                title={data.title}
+                description={data.desc}
+                image={data.image}
+                hashtags={hashtags}
+              />
+            </div>
+          )}
         </article>
 
         {/* Related Posts Section with Search */}

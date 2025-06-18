@@ -20,6 +20,8 @@ interface RedirectData {
 function RedirectPageContent() {
   const searchParams = useSearchParams()
   const [allRedirects, setAllRedirects] = useState<{ [slug: string]: RedirectData }>({})
+  const [currentUrl, setCurrentUrl] = useState('')
+  const [isClient, setIsClient] = useState(false)
   
   const title = searchParams.get('title') || 'Redirect Page'
   const desc = searchParams.get('desc') || 'This is a redirect page'
@@ -29,8 +31,13 @@ function RedirectPageContent() {
   const siteName = searchParams.get('site_name') || ''
   const type = searchParams.get('type') || 'website'
 
-  const currentUrl = typeof window !== 'undefined' ? window.location.href : ''
   const hashtags = keywords ? keywords.split(',').map(k => k.trim()) : []
+
+  // Handle client-side mounting
+  useEffect(() => {
+    setIsClient(true)
+    setCurrentUrl(window.location.href)
+  }, [])
 
   // Fetch all redirects for related posts
   useEffect(() => {
@@ -46,11 +53,15 @@ function RedirectPageContent() {
       }
     }
     
-    fetchRedirects()
-  }, [])
+    if (isClient) {
+      fetchRedirects()
+    }
+  }, [isClient])
 
-  // Update document title and meta tags
+  // Update document title and meta tags only on client side
   useEffect(() => {
+    if (!isClient) return
+
     document.title = `${title} | seo360`
     
     // Update meta description
@@ -129,10 +140,12 @@ function RedirectPageContent() {
     }
     canonical.setAttribute('href', currentUrl)
 
-  }, [title, desc, url, image, keywords, siteName, type, currentUrl])
+  }, [title, desc, url, image, keywords, siteName, type, currentUrl, isClient])
 
   const continueReading = () => {
-    window.location.href = url
+    if (typeof window !== 'undefined') {
+      window.location.href = url
+    }
   }
 
   return (
@@ -223,16 +236,18 @@ function RedirectPageContent() {
             </div>
           </div>
 
-          {/* Social Share */}
-          <div className="mb-12">
-            <SocialShare
-              url={currentUrl}
-              title={title}
-              description={desc}
-              image={image}
-              hashtags={hashtags}
-            />
-          </div>
+          {/* Social Share - Only render on client */}
+          {isClient && (
+            <div className="mb-12">
+              <SocialShare
+                url={currentUrl}
+                title={title}
+                description={desc}
+                image={image}
+                hashtags={hashtags}
+              />
+            </div>
+          )}
         </article>
 
         {/* Related Posts Section with Search */}

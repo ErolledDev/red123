@@ -21,13 +21,22 @@ interface RelatedPostsProps {
 }
 
 export default function RelatedPosts({ allRedirects, currentSlug, currentKeywords, showSearch = false }: RelatedPostsProps) {
-  const [visiblePosts, setVisiblePosts] = useState(12) // Changed from 3 to 12
+  const [visiblePosts, setVisiblePosts] = useState(12)
   const [isLoading, setIsLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   // Filter out current post and get related posts
   const getRelatedPosts = () => {
-    const posts = Object.entries(allRedirects || {}).filter(([slug]) => slug !== currentSlug)
+    if (!allRedirects || typeof allRedirects !== 'object') {
+      return []
+    }
+
+    const posts = Object.entries(allRedirects).filter(([slug]) => slug !== currentSlug)
     
     // Apply search filter if search term exists
     let filteredPosts = posts
@@ -66,16 +75,42 @@ export default function RelatedPosts({ allRedirects, currentSlug, currentKeyword
   const loadMorePosts = () => {
     setIsLoading(true)
     setTimeout(() => {
-      setVisiblePosts(prev => Math.min(prev + 6, allRelatedPosts.length)) // Load 6 more at a time
+      setVisiblePosts(prev => Math.min(prev + 6, allRelatedPosts.length))
       setIsLoading(false)
     }, 500)
   }
 
   // Reset visible posts when search term changes
   useEffect(() => {
-    const totalPosts = getRelatedPosts().length
-    setVisiblePosts(Math.min(12, totalPosts)) // Auto-fill up to 12 or all available posts
-  }, [searchTerm, allRedirects])
+    if (isClient) {
+      const totalPosts = getRelatedPosts().length
+      setVisiblePosts(Math.min(12, totalPosts))
+    }
+  }, [searchTerm, allRedirects, isClient])
+
+  // Don't render on server side to prevent hydration issues
+  if (!isClient) {
+    return (
+      <section className="border-t border-gray-200 pt-12">
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Related Articles</h2>
+          <div className="animate-pulse">
+            <div className="h-6 bg-gray-200 rounded w-1/2 mb-4"></div>
+            <div className="h-10 bg-gray-200 rounded w-1/3"></div>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="animate-pulse">
+              <div className="h-48 bg-gray-200 rounded-2xl mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
 
   if (allRelatedPosts.length === 0 && !searchTerm) {
     return null
