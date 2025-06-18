@@ -1,0 +1,30 @@
+{
+  "name": "SEO Redirects Pro",
+  "short_name": "SEO Redirects",
+  "description": "Create powerful SEO-optimized redirections that get instantly indexed by search engines",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0ea5e9",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["productivity", "business", "utilities"],
+  "lang": "en",
+  "dir": "ltr"
+}
