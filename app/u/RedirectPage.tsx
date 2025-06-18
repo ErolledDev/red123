@@ -4,8 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import SocialShare from '../../components/SocialShare'
 import RelatedPosts from '../../components/RelatedPosts'
-import SimpleHeader from '../../components/SimpleHeader'
-import SimpleFooter from '../../components/SimpleFooter'
+
 
 interface RedirectData {
   title: string
