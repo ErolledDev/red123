@@ -17,7 +17,13 @@ interface RedirectData {
   type: string
 }
 
-export default function RedirectPage() {
+interface Props {
+  data: RedirectData
+  allRedirects: { [slug: string]: RedirectData }
+  currentSlug: string
+}
+
+function RedirectPageContent() {
   const searchParams = useSearchParams()
   const [allRedirects, setAllRedirects] = useState<{ [slug: string]: RedirectData }>({})
   
@@ -247,4 +253,8 @@ export default function RedirectPage() {
       <SimpleFooter />
     </div>
   )
+}
+
+export default function RedirectPage() {
+  return <RedirectPageContent />
 }

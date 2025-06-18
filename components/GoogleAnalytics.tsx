@@ -10,7 +10,7 @@ declare global {
   }
 }
 
-export default function GoogleAnalytics() {
+function GoogleAnalyticsContent() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const GA_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-LYY5GTB778'
@@ -56,6 +56,10 @@ export default function GoogleAnalytics() {
   }, [pathname, searchParams, GA_ID])
 
   return null
+}
+
+export default function GoogleAnalytics() {
+  return <GoogleAnalyticsContent />
 }
 
 // Custom hook for tracking events

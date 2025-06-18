@@ -1,6 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { ToastProvider } from '../components/ToastContainer'
+import { Suspense } from 'react'
 import GoogleAnalytics from '../components/GoogleAnalytics'
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://your-domain.com'
@@ -68,7 +69,9 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#0ea5e9" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <GoogleAnalytics />
+        <Suspense fallback={null}>
+          <GoogleAnalytics />
+        </Suspense>
       </head>
       <body className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50">
         <ToastProvider>
