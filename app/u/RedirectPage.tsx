@@ -21,7 +21,7 @@ function RedirectPageContent() {
   const searchParams = useSearchParams()
   const [allRedirects, setAllRedirects] = useState<{ [slug: string]: RedirectData }>({})
   const [currentUrl, setCurrentUrl] = useState('')
-  const [isClient, setIsClient] = useState(false)
+  const [mounted, setMounted] = useState(false)
   
   const title = searchParams.get('title') || 'Redirect Page'
   const desc = searchParams.get('desc') || 'This is a redirect page'
@@ -35,8 +35,10 @@ function RedirectPageContent() {
 
   // Handle client-side mounting
   useEffect(() => {
-    setIsClient(true)
-    setCurrentUrl(window.location.href)
+    setMounted(true)
+    if (typeof window !== 'undefined') {
+      setCurrentUrl(window.location.href)
+    }
   }, [])
 
   // Fetch all redirects for related posts
@@ -53,14 +55,14 @@ function RedirectPageContent() {
       }
     }
     
-    if (isClient) {
+    if (mounted) {
       fetchRedirects()
     }
-  }, [isClient])
+  }, [mounted])
 
   // Update document title and meta tags only on client side
   useEffect(() => {
-    if (!isClient) return
+    if (!mounted || typeof document === 'undefined') return
 
     document.title = `${title} | seo360`
     
@@ -140,7 +142,7 @@ function RedirectPageContent() {
     }
     canonical.setAttribute('href', currentUrl)
 
-  }, [title, desc, url, image, keywords, siteName, type, currentUrl, isClient])
+  }, [title, desc, url, image, keywords, siteName, type, currentUrl, mounted])
 
   const continueReading = () => {
     if (typeof window !== 'undefined') {
@@ -154,7 +156,7 @@ function RedirectPageContent() {
       
       <main className="max-w-4xl mx-auto px-6 py-8 flex-grow">
         {/* Article Header */}
-        <article className="mb-12">
+        <div className="mb-12">
           {/* Article Meta */}
           <div className="mb-6">
             <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
@@ -168,13 +170,13 @@ function RedirectPageContent() {
                 </>
               )}
               <span>•</span>
-              <time dateTime={new Date().toISOString()}>
+              <span>
                 {new Date().toLocaleDateString('en-US', { 
                   year: 'numeric', 
                   month: 'long', 
                   day: 'numeric' 
                 })}
-              </time>
+              </span>
             </div>
             
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
@@ -236,8 +238,8 @@ function RedirectPageContent() {
             </div>
           </div>
 
-          {/* Social Share - Only render on client */}
-          {isClient && (
+          {/* Social Share - Only render when mounted */}
+          {mounted && currentUrl && (
             <div className="mb-12">
               <SocialShare
                 url={currentUrl}
@@ -248,7 +250,7 @@ function RedirectPageContent() {
               />
             </div>
           )}
-        </article>
+        </div>
 
         {/* Related Posts Section with Search */}
         <RelatedPosts 

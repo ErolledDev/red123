@@ -12,28 +12,15 @@ interface SocialShareProps {
 
 export default function SocialShare({ url, title, description, image, hashtags }: SocialShareProps) {
   const [copied, setCopied] = useState(false)
-  const [isClient, setIsClient] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setIsClient(true)
+    setMounted(true)
   }, [])
 
-  // Don't render anything on server side to prevent hydration issues
-  if (!isClient) {
-    return (
-      <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
-        <div className="flex items-center mb-4">
-          <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center mr-3">
-            <span className="text-white text-sm">📤</span>
-          </div>
-          <h3 className="text-lg font-semibold text-gray-900">Share This Page</h3>
-        </div>
-        <div className="animate-pulse">
-          <div className="h-10 bg-gray-200 rounded mb-2"></div>
-          <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-        </div>
-      </div>
-    )
+  // Don't render anything until mounted to prevent hydration issues
+  if (!mounted) {
+    return null
   }
 
   const encodedUrl = encodeURIComponent(url)

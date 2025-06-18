@@ -25,9 +25,11 @@ export default function RelatedPosts({ allRedirects, currentSlug, currentKeyword
   const [isLoading, setIsLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [isClient, setIsClient] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
+    setMounted(true)
   }, [])
 
   // Filter out current post and get related posts
@@ -69,12 +71,10 @@ export default function RelatedPosts({ allRedirects, currentSlug, currentKeyword
     return filteredPosts
   }
 
-  const allRelatedPosts = getRelatedPosts()
-  const displayedPosts = allRelatedPosts.slice(0, visiblePosts)
-
   const loadMorePosts = () => {
     setIsLoading(true)
     setTimeout(() => {
+      const allRelatedPosts = getRelatedPosts()
       setVisiblePosts(prev => Math.min(prev + 6, allRelatedPosts.length))
       setIsLoading(false)
     }, 500)
@@ -82,35 +82,19 @@ export default function RelatedPosts({ allRedirects, currentSlug, currentKeyword
 
   // Reset visible posts when search term changes
   useEffect(() => {
-    if (isClient) {
+    if (mounted) {
       const totalPosts = getRelatedPosts().length
       setVisiblePosts(Math.min(12, totalPosts))
     }
-  }, [searchTerm, allRedirects, isClient])
+  }, [searchTerm, allRedirects, mounted])
 
-  // Don't render on server side to prevent hydration issues
-  if (!isClient) {
-    return (
-      <section className="border-t border-gray-200 pt-12">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Related Articles</h2>
-          <div className="animate-pulse">
-            <div className="h-6 bg-gray-200 rounded w-1/2 mb-4"></div>
-            <div className="h-10 bg-gray-200 rounded w-1/3"></div>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="animate-pulse">
-              <div className="h-48 bg-gray-200 rounded-2xl mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            </div>
-          ))}
-        </div>
-      </section>
-    )
+  // Don't render anything until mounted to prevent hydration issues
+  if (!mounted) {
+    return null
   }
+
+  const allRelatedPosts = getRelatedPosts()
+  const displayedPosts = allRelatedPosts.slice(0, visiblePosts)
 
   if (allRelatedPosts.length === 0 && !searchTerm) {
     return null
@@ -130,7 +114,7 @@ export default function RelatedPosts({ allRedirects, currentSlug, currentKeyword
               placeholder="Search related articles..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -154,8 +138,8 @@ export default function RelatedPosts({ allRedirects, currentSlug, currentKeyword
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {displayedPosts.map(([slug, data]) => (
-          <Link key={slug} href={`/${slug}`} className="group">
-            <article className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col">
+          <Link key={slug} href={`/${slug}`} className="group block">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col">
               {data.image && (
                 <div className="aspect-video overflow-hidden flex-shrink-0">
                   <img 
@@ -169,7 +153,7 @@ export default function RelatedPosts({ allRedirects, currentSlug, currentKeyword
               
               <div className="p-6 flex flex-col flex-grow">
                 <div className="flex items-center space-x-2 text-xs text-gray-500 mb-3">
-                  <span className="bg-primary-100 text-primary-700 px-2 py-1 rounded-full font-medium">
+                  <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">
                     {data.type.charAt(0).toUpperCase() + data.type.slice(1)}
                   </span>
                   {data.site_name && (
@@ -180,7 +164,7 @@ export default function RelatedPosts({ allRedirects, currentSlug, currentKeyword
                   )}
                 </div>
                 
-                <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors">
+                <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
                   {data.title}
                 </h3>
                 
@@ -201,14 +185,14 @@ export default function RelatedPosts({ allRedirects, currentSlug, currentKeyword
                   </div>
                 )}
                 
-                <div className="flex items-center text-primary-600 text-sm font-medium group-hover:text-primary-700 mt-auto">
+                <div className="flex items-center text-blue-600 text-sm font-medium group-hover:text-blue-700 mt-auto">
                   Read More
                   <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
               </div>
-            </article>
+            </div>
           </Link>
         ))}
       </div>
@@ -219,7 +203,7 @@ export default function RelatedPosts({ allRedirects, currentSlug, currentKeyword
           <button
             onClick={loadMorePosts}
             disabled={isLoading}
-            className="inline-flex items-center px-8 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

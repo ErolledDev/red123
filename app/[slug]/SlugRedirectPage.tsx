@@ -24,21 +24,23 @@ interface Props {
 
 export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Props) {
   const [currentUrl, setCurrentUrl] = useState('')
-  const [isClient, setIsClient] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const hashtags = data.keywords ? data.keywords.split(',').map(k => k.trim()) : []
 
   // Handle client-side mounting
   useEffect(() => {
-    setIsClient(true)
-    setCurrentUrl(window.location.href)
+    setMounted(true)
+    if (typeof window !== 'undefined') {
+      setCurrentUrl(window.location.href)
+    }
   }, [])
 
   // Update document title only on client side
   useEffect(() => {
-    if (isClient) {
+    if (mounted && typeof document !== 'undefined') {
       document.title = `${data.title} | seo360`
     }
-  }, [data.title, isClient])
+  }, [data.title, mounted])
 
   const continueReading = () => {
     if (typeof window !== 'undefined') {
@@ -52,7 +54,7 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
       
       <main className="max-w-4xl mx-auto px-6 py-8 flex-grow">
         {/* Article Header */}
-        <article className="mb-12">
+        <div className="mb-12">
           {/* Article Meta */}
           <div className="mb-6">
             <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
@@ -66,13 +68,13 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
                 </>
               )}
               <span>•</span>
-              <time dateTime={new Date().toISOString()}>
+              <span>
                 {new Date().toLocaleDateString('en-US', { 
                   year: 'numeric', 
                   month: 'long', 
                   day: 'numeric' 
                 })}
-              </time>
+              </span>
             </div>
             
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
@@ -134,8 +136,8 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
             </div>
           </div>
 
-          {/* Social Share - Only render on client */}
-          {isClient && (
+          {/* Social Share - Only render when mounted */}
+          {mounted && currentUrl && (
             <div className="mb-12">
               <SocialShare
                 url={currentUrl}
@@ -146,7 +148,7 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
               />
             </div>
           )}
-        </article>
+        </div>
 
         {/* Related Posts Section with Search */}
         <RelatedPosts 
