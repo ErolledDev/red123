@@ -1,0 +1,54 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - echo "Node version:"
+        - node --version
+        - echo "NPM version:"
+        - npm --version
+        - echo "Installing dependencies..."
+        - npm ci --cache .npm --prefer-offline --no-audit --no-fund
+        - echo "Setting environment variables..."
+        - echo "NEXT_PUBLIC_BASE_URL=https://$AWS_BRANCH.$AWS_APP_ID.amplifyapp.com" >> .env.local
+        - echo "Environment variables set:"
+        - cat .env.local
+        - echo "Checking current directory permissions:"
+        - ls -la
+        - echo "Creating /tmp directory if needed:"
+        - mkdir -p /tmp
+        - echo "Checking /tmp permissions:"
+        - ls -la /tmp
+    build:
+      commands:
+        - echo "Building Next.js SSR application..."
+        - npm run build
+        - echo "Build completed successfully"
+        - echo "Verifying .next directory structure:"
+        - ls -la .next/
+        - echo "Checking for server files:"
+        - ls -la .next/server/ || echo "Server directory not found"
+        - echo "Checking for standalone files:"
+        - ls -la .next/standalone/ || echo "Standalone directory not found"
+        - echo "Copying redirects.json to multiple locations for serverless compatibility:"
+        - cp redirects.json .next/redirects.json || echo "Failed to copy to .next"
+        - cp redirects.json /tmp/redirects.json || echo "Failed to copy to /tmp"
+    postBuild:
+      commands:
+        - echo "Post-build SSR setup..."
+        - echo "Next.js SSR build artifacts ready"
+        - echo "Final .next structure:"
+        - find .next -type f -name "*.js" | head -10
+        - echo "Checking redirects.json locations:"
+        - ls -la redirects.json || echo "redirects.json not found in root"
+        - ls -la .next/redirects.json || echo "redirects.json not found in .next"
+        - ls -la /tmp/redirects.json || echo "redirects.json not found in /tmp"
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .next/cache/**/*
+      - node_modules/**/*
+      - .npm/**/*
