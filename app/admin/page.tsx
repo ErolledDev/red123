@@ -27,6 +27,7 @@ interface CreateRedirectResponse {
   slug: string
   success: boolean
   warning?: string
+  error?: string // Added missing error property
   data?: RedirectData
   isUpdate?: boolean
 }

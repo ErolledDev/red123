@@ -12,14 +12,6 @@ const nextConfig = {
   // Optimize for production deployment
   poweredByHeader: false,
   
-  // Ensure API routes are enabled
-  api: {
-    // Enable API routes
-    bodyParser: {
-      sizeLimit: '1mb',
-    },
-  },
-  
   // Image configuration for SSR
   images: {
     remotePatterns: [
