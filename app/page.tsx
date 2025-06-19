@@ -69,13 +69,13 @@ export default function HomePage() {
                 <span className="ml-2 text-sm bg-white/20 px-2 py-1 rounded-full">No Credit Card</span>
               </a>
               <a
-                href="#how-it-works"
+                href="#features"
                 className="inline-flex items-center px-8 py-4 bg-white/80 backdrop-blur-sm text-gray-700 border border-gray-300 rounded-2xl hover:bg-white hover:shadow-lg transition-all duration-300 font-semibold text-lg"
               >
                 <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2-10h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                See How It Works
+                See Features
               </a>
             </div>
             
@@ -334,156 +334,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-              Get Indexed in 4 Simple Steps
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              From creation to Google indexing in under 24 hours. No technical skills required.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                step: '01',
-                title: 'Create Your Redirect',
-                description: 'Fill out our simple form with your product/content details. Add title, description, target URL, and keywords.',
-                color: 'from-blue-500 to-blue-600',
-                icon: (
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
-                )
-              },
-              {
-                step: '02',
-                title: 'Get SEO-Optimized URLs',
-                description: 'Instantly receive both clean slug-based URLs and parameter-rich URLs optimized for maximum SEO impact.',
-                color: 'from-indigo-500 to-indigo-600',
-                icon: (
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                  </svg>
-                )
-              },
-              {
-                step: '03',
-                title: 'Auto-Submit to Search Engines',
-                description: 'Your redirect is automatically added to our sitemap and submitted to Google, Bing, and other search engines.',
-                color: 'from-green-500 to-green-600',
-                icon: (
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                )
-              },
-              {
-                step: '04',
-                title: 'Watch Traffic Soar',
-                description: 'Start sharing your SEO-optimized URLs and watch as organic traffic flows to your content within hours.',
-                color: 'from-purple-500 to-purple-600',
-                icon: (
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                  </svg>
-                )
-              }
-            ].map((item, index) => (
-              <div key={index} className="text-center group">
-                <div className={`w-24 h-24 bg-gradient-to-r ${item.color} rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:scale-110 transition-transform duration-300`}>
-                  <div className="text-center">
-                    {item.icon}
-                    <div className="text-white font-bold text-sm mt-1">{item.step}</div>
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">{item.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{item.description}</p>
-              </div>
-            ))}
-          </div>
-          
-          {/* CTA in How It Works */}
-          <div className="text-center mt-16">
-            <a
-              href="/admin"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold text-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
-            >
-              <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              Start Creating Redirects Now
-            </a>
-            <p className="text-sm text-gray-500 mt-3">Free to start • No credit card required • Instant setup</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials/Social Proof */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-              Trusted by Top Marketers Worldwide
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Join thousands of successful marketers who are already using our SEO redirect system to dominate search results.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                quote: "This redirect system helped me get my affiliate products indexed in Google within 6 hours. My conversion rates increased by 300% in the first month!",
-                author: "Sarah Chen",
-                role: "Affiliate Marketer",
-                avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=64&h=64&fit=crop&crop=face"
-              },
-              {
-                quote: "As a content creator, getting my videos discovered was always a challenge. Now my YouTube videos rank on Google search results thanks to these SEO redirects.",
-                author: "Mike Rodriguez",
-                role: "YouTuber & Blogger",
-                avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face"
-              },
-              {
-                quote: "The backlink power from these redirects boosted my domain authority from 15 to 45 in just 3 months. My organic traffic increased by 1000%!",
-                author: "Emma Thompson",
-                role: "Digital Marketing Agency",
-                avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face"
-              }
-            ].map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
-                <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <blockquote className="text-gray-600 mb-6 italic leading-relaxed">
-                  "{testimonial.quote}"
-                </blockquote>
-                <div className="flex items-center">
-                  <img 
-                    src={testimonial.avatar} 
-                    alt={testimonial.author}
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <div className="font-semibold text-gray-900">{testimonial.author}</div>
-                    <div className="text-sm text-gray-500">{testimonial.role}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
 
       <SimpleFooter />
     </div>
