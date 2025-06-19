@@ -18,18 +18,6 @@ export default function SimpleHeader() {
               <p className="text-xs text-gray-500">Instant Google Indexing</p>
             </div>
           </Link>
-          
-          <nav className="hidden sm:flex items-center space-x-6">
-            <Link href="/" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
-              Home
-            </Link>
-            <Link href="/admin" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
-              Admin
-            </Link>
-            <Link href="/sitemap.xml" target="_blank" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
-              Sitemap
-            </Link>
-          </nav>
         </div>
       </div>
     </header>

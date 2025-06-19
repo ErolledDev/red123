@@ -72,13 +72,11 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
               </span>
               {data.site_name && (
                 <>
-                  <span className="text-gray-400 hidden sm:inline">•</span>
                   <span className="text-gray-500 text-xs sm:text-sm flex-1 min-w-0 truncate">
                     {data.site_name}
                   </span>
                 </>
               )}
-              <span className="text-gray-400 hidden sm:inline">•</span>
               <time className="text-gray-500 text-xs sm:text-sm whitespace-nowrap">
                 {new Date().toLocaleDateString('en-US', { 
                   year: 'numeric', 
