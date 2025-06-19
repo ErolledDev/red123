@@ -21,6 +21,8 @@ interface RedirectData {
   keywords: string
   site_name: string
   type: string
+  created_at: string
+  updated_at: string
 }
 
 interface RedirectsData {
@@ -114,6 +116,7 @@ export async function POST(request: NextRequest) {
           console.error('Failed to create file in any location:', cwdError)
           
           // If we can't write files, return the data anyway for client-side handling
+          const currentTime = new Date().toISOString()
           const redirectData: RedirectData = {
             title: data.title.trim(),
             desc: data.desc.trim(),
@@ -121,7 +124,9 @@ export async function POST(request: NextRequest) {
             image: data.image ? data.image.trim() : '',
             keywords: data.keywords ? data.keywords.trim() : '',
             site_name: data.site_name ? data.site_name.trim() : '',
-            type: data.type || 'website'
+            type: data.type || 'website',
+            created_at: currentTime,
+            updated_at: currentTime
           }
           
           const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
@@ -153,12 +158,14 @@ export async function POST(request: NextRequest) {
     }
     
     // Check if slug already exists (for new redirects, not updates)
-    if (!data.slug && redirects[slug]) {
+    const isUpdate = data.slug && redirects[slug]
+    if (!isUpdate && redirects[slug]) {
       slug = `${slug}-${Date.now()}`
       console.log('Slug collision, using:', slug)
     }
     
-    // Create redirect data object
+    // Create redirect data object with timestamps
+    const currentTime = new Date().toISOString()
     const redirectData: RedirectData = {
       title: data.title.trim(),
       desc: data.desc.trim(),
@@ -166,7 +173,9 @@ export async function POST(request: NextRequest) {
       image: data.image ? data.image.trim() : '',
       keywords: data.keywords ? data.keywords.trim() : '',
       site_name: data.site_name ? data.site_name.trim() : '',
-      type: data.type || 'website'
+      type: data.type || 'website',
+      created_at: isUpdate ? (redirects[slug]?.created_at || currentTime) : currentTime,
+      updated_at: currentTime
     }
     
     // Add or update redirect
@@ -220,14 +229,15 @@ export async function POST(request: NextRequest) {
     const longUrl = `${baseUrl}/u?${params.toString()}`
     const shortUrl = `${baseUrl}/${slug}`
     
-    console.log(`Successfully created/updated redirect: ${slug}`)
+    console.log(`Successfully ${isUpdate ? 'updated' : 'created'} redirect: ${slug}`)
     console.log('=== CREATE REDIRECT API END ===')
     
     return NextResponse.json({
       long: longUrl,
       short: shortUrl,
       slug: slug,
-      success: true
+      success: true,
+      isUpdate: isUpdate
     })
     
   } catch (error) {
