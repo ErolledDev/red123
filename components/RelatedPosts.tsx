@@ -138,7 +138,7 @@ export default function RelatedPosts({ allRedirects, currentSlug, currentKeyword
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {displayedPosts.map(([slug, data]) => (
-          <Link key={slug} href={`/${slug}`} className="group block">
+          <Link key={slug} href={`/${slug}`} className="group block focus:outline-none">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-full flex flex-col">
               {data.image && (
                 <div className="aspect-video overflow-hidden flex-shrink-0">
