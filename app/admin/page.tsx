@@ -50,6 +50,7 @@ export default function AdminPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [sortBy, setSortBy] = useState<'title' | 'date' | 'type'>('title')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   const { showSuccess, showError, showConfirm } = useToast()
   const { trackRedirectCreation, trackUrlCopy } = useGoogleAnalytics()
@@ -259,6 +260,21 @@ export default function AdminPage() {
     setGeneratedUrls(null)
   }
 
+  // Generate long URL for display
+  const generateLongUrl = (slug: string, data: RedirectData) => {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    const params = new URLSearchParams({
+      title: data.title,
+      desc: data.desc,
+      url: data.url,
+      ...(data.image && { image: data.image }),
+      ...(data.keywords && { keywords: data.keywords }),
+      ...(data.site_name && { site_name: data.site_name }),
+      type: data.type
+    })
+    return `${baseUrl}/u?${params.toString()}`
+  }
+
   // Filter and sort redirects
   const filteredRedirects = Object.entries(redirects).filter(([slug, data]) => {
     const searchLower = searchTerm.toLowerCase()
@@ -287,19 +303,21 @@ export default function AdminPage() {
   })
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
       {/* Mobile Header with Hamburger */}
       <div className="lg:hidden bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-lg">A</span>
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
             </div>
             <div>
               <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                Admin Panel
+                Admin Dashboard
               </h1>
-              <p className="text-sm text-gray-500">SEO Redirects</p>
+              <p className="text-sm text-gray-500">SEO Redirects Pro</p>
             </div>
           </div>
           
@@ -331,7 +349,7 @@ export default function AdminPage() {
           id="sidebar"
           className={`
             fixed lg:static inset-y-0 left-0 z-50 lg:z-auto
-            w-80 lg:w-64 bg-white shadow-2xl lg:shadow-lg border-r border-gray-200 
+            w-80 lg:w-72 bg-white shadow-2xl lg:shadow-lg border-r border-gray-200 
             flex flex-col transform transition-transform duration-300 ease-in-out
             ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
           `}
@@ -339,12 +357,14 @@ export default function AdminPage() {
           {/* Desktop Header */}
           <div className="hidden lg:block p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-xl">A</span>
+              <div className="w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
               </div>
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  Admin Panel
+                  Admin Dashboard
                 </h1>
                 <p className="text-sm text-gray-500">SEO Redirects Pro</p>
               </div>
@@ -356,11 +376,13 @@ export default function AdminPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-xl">A</span>
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
                 </div>
                 <div>
                   <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                    Admin Panel
+                    Admin Dashboard
                   </h1>
                   <p className="text-sm text-gray-500">SEO Redirects Pro</p>
                 </div>
@@ -484,7 +506,7 @@ export default function AdminPage() {
 
         {/* Main Content */}
         <div className="flex-1 overflow-auto">
-          <div className="max-w-6xl mx-auto p-4 lg:p-8">
+          <div className="max-w-7xl mx-auto p-4 lg:p-8">
             {/* Create Redirect Tab */}
             {activeTab === 'create' && (
               <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
@@ -710,9 +732,12 @@ export default function AdminPage() {
                             />
                             <button
                               onClick={() => copyToClipboard(generatedUrls.short, 'short')}
-                              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium flex items-center space-x-1"
                             >
-                              Copy
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                              </svg>
+                              <span>Copy</span>
                             </button>
                           </div>
                         </div>
@@ -728,9 +753,12 @@ export default function AdminPage() {
                             />
                             <button
                               onClick={() => copyToClipboard(generatedUrls.long, 'long')}
-                              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium flex items-center space-x-1"
                             >
-                              Copy
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                              </svg>
+                              <span>Copy</span>
                             </button>
                           </div>
                         </div>
@@ -757,7 +785,7 @@ export default function AdminPage() {
                   </div>
 
                   {/* Search and Filter Controls */}
-                  <div className="mb-6 flex flex-col sm:flex-row gap-4">
+                  <div className="mb-6 flex flex-col lg:flex-row gap-4">
                     <div className="flex-1">
                       <div className="relative">
                         <input
@@ -792,6 +820,25 @@ export default function AdminPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                         </svg>
                       </button>
+
+                      <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+                        <button
+                          onClick={() => setViewMode('grid')}
+                          className={`px-3 py-3 ${viewMode === 'grid' ? 'bg-blue-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => setViewMode('list')}
+                          className={`px-3 py-3 ${viewMode === 'list' ? 'bg-blue-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
 
@@ -827,78 +874,300 @@ export default function AdminPage() {
                       )}
                     </div>
                   ) : (
-                    <div className="space-y-4">
-                      {filteredRedirects.map(([slug, data]) => (
-                        <div key={slug} className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center space-x-3 mb-3">
-                                <h3 className="text-lg font-semibold text-gray-900 truncate">
-                                  {data.title}
-                                </h3>
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                  {data.type}
-                                </span>
+                    <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6' : 'space-y-4'}>
+                      {filteredRedirects.map(([slug, data]) => {
+                        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+                        const shortUrl = `${baseUrl}/${slug}`
+                        const longUrl = generateLongUrl(slug, data)
+
+                        return viewMode === 'grid' ? (
+                          // Grid View
+                          <div key={slug} className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
+                            {/* Image */}
+                            {data.image && (
+                              <div className="aspect-video overflow-hidden">
+                                <img 
+                                  src={data.image} 
+                                  alt={data.title}
+                                  className="w-full h-full object-cover"
+                                  loading="lazy"
+                                />
+                              </div>
+                            )}
+                            
+                            <div className="p-4">
+                              {/* Header */}
+                              <div className="flex items-start justify-between mb-3">
+                                <div className="flex items-center space-x-2">
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    {data.type}
+                                  </span>
+                                  {data.site_name && (
+                                    <span className="text-xs text-gray-500">{data.site_name}</span>
+                                  )}
+                                </div>
+                                
+                                <div className="flex items-center space-x-1">
+                                  <button
+                                    onClick={() => handleEdit(slug, data)}
+                                    className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                    title="Edit redirect"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                  </button>
+                                  
+                                  <button
+                                    onClick={() => handleDelete(slug)}
+                                    className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                    title="Delete redirect"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                  </button>
+                                  
+                                  <a
+                                    href={`/${slug}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-1.5 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+                                    title="View redirect"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                  </a>
+                                </div>
                               </div>
                               
-                              <p className="text-gray-600 mb-3 line-clamp-2">
+                              {/* Title */}
+                              <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                                {data.title}
+                              </h3>
+                              
+                              {/* Description */}
+                              <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                                 {data.desc}
                               </p>
                               
-                              <div className="flex items-center space-x-4 text-sm text-gray-500">
-                                <span className="flex items-center">
-                                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                                  </svg>
-                                  /{slug}
-                                </span>
-                                {data.keywords && (
-                                  <span className="flex items-center">
-                                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                                    </svg>
-                                    {data.keywords.split(',').length} keywords
-                                  </span>
-                                )}
+                              {/* URLs */}
+                              <div className="space-y-2 mb-3">
+                                <div>
+                                  <label className="text-xs font-medium text-gray-500">Short URL</label>
+                                  <div className="flex items-center space-x-1 mt-1">
+                                    <input
+                                      type="text"
+                                      value={shortUrl}
+                                      readOnly
+                                      className="flex-1 text-xs px-2 py-1 bg-gray-50 border border-gray-200 rounded text-gray-700"
+                                    />
+                                    <button
+                                      onClick={() => copyToClipboard(shortUrl, 'short')}
+                                      className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
+                                      title="Copy short URL"
+                                    >
+                                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                      </svg>
+                                    </button>
+                                  </div>
+                                </div>
+                                
+                                <div>
+                                  <label className="text-xs font-medium text-gray-500">Long URL</label>
+                                  <div className="flex items-center space-x-1 mt-1">
+                                    <input
+                                      type="text"
+                                      value={longUrl}
+                                      readOnly
+                                      className="flex-1 text-xs px-2 py-1 bg-gray-50 border border-gray-200 rounded text-gray-700"
+                                    />
+                                    <button
+                                      onClick={() => copyToClipboard(longUrl, 'long')}
+                                      className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
+                                      title="Copy long URL"
+                                    >
+                                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                      </svg>
+                                    </button>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                            
-                            <div className="flex items-center space-x-2 ml-4">
-                              <button
-                                onClick={() => handleEdit(slug, data)}
-                                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                title="Edit redirect"
-                              >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                </svg>
-                              </button>
                               
-                              <button
-                                onClick={() => handleDelete(slug)}
-                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                title="Delete redirect"
-                              >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                              </button>
-                              
-                              <a
-                                href={`/${slug}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
-                                title="View redirect"
-                              >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                </svg>
-                              </a>
+                              {/* Keywords */}
+                              {data.keywords && (
+                                <div className="flex flex-wrap gap-1">
+                                  {data.keywords.split(',').slice(0, 3).map((keyword, index) => (
+                                    <span 
+                                      key={index}
+                                      className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs"
+                                    >
+                                      #{keyword.trim()}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ) : (
+                          // List View
+                          <div key={slug} className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow bg-white">
+                            <div className="flex items-start gap-4">
+                              {/* Image */}
+                              {data.image && (
+                                <div className="w-24 h-16 flex-shrink-0 overflow-hidden rounded-lg">
+                                  <img 
+                                    src={data.image} 
+                                    alt={data.title}
+                                    className="w-full h-full object-cover"
+                                    loading="lazy"
+                                  />
+                                </div>
+                              )}
+                              
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-start justify-between mb-2">
+                                  <div className="flex items-center space-x-3">
+                                    <h3 className="text-lg font-semibold text-gray-900 truncate">
+                                      {data.title}
+                                    </h3>
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                      {data.type}
+                                    </span>
+                                  </div>
+                                  
+                                  <div className="flex items-center space-x-2 ml-4">
+                                    <button
+                                      onClick={() => handleEdit(slug, data)}
+                                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                      title="Edit redirect"
+                                    >
+                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                      </svg>
+                                    </button>
+                                    
+                                    <button
+                                      onClick={() => handleDelete(slug)}
+                                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                      title="Delete redirect"
+                                    >
+                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                      </svg>
+                                    </button>
+                                    
+                                    <a
+                                      href={`/${slug}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+                                      title="View redirect"
+                                    >
+                                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                      </svg>
+                                    </a>
+                                  </div>
+                                </div>
+                                
+                                <p className="text-gray-600 mb-3 line-clamp-2">
+                                  {data.desc}
+                                </p>
+                                
+                                {/* URLs in List View */}
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-3">
+                                  <div>
+                                    <label className="text-xs font-medium text-gray-500">Short URL</label>
+                                    <div className="flex items-center space-x-2 mt-1">
+                                      <input
+                                        type="text"
+                                        value={shortUrl}
+                                        readOnly
+                                        className="flex-1 text-sm px-3 py-2 bg-gray-50 border border-gray-200 rounded text-gray-700"
+                                      />
+                                      <button
+                                        onClick={() => copyToClipboard(shortUrl, 'short')}
+                                        className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
+                                        title="Copy short URL"
+                                      >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                      </button>
+                                    </div>
+                                  </div>
+                                  
+                                  <div>
+                                    <label className="text-xs font-medium text-gray-500">Long URL</label>
+                                    <div className="flex items-center space-x-2 mt-1">
+                                      <input
+                                        type="text"
+                                        value={longUrl}
+                                        readOnly
+                                        className="flex-1 text-sm px-3 py-2 bg-gray-50 border border-gray-200 rounded text-gray-700"
+                                      />
+                                      <button
+                                        onClick={() => copyToClipboard(longUrl, 'long')}
+                                        className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
+                                        title="Copy long URL"
+                                      >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center space-x-4 text-sm text-gray-500">
+                                    <span className="flex items-center">
+                                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                      </svg>
+                                      /{slug}
+                                    </span>
+                                    {data.site_name && (
+                                      <>
+                                        <span>•</span>
+                                        <span>{data.site_name}</span>
+                                      </>
+                                    )}
+                                    {data.keywords && (
+                                      <>
+                                        <span>•</span>
+                                        <span className="flex items-center">
+                                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                          </svg>
+                                          {data.keywords.split(',').length} keywords
+                                        </span>
+                                      </>
+                                    )}
+                                  </div>
+                                  
+                                  {data.keywords && (
+                                    <div className="flex flex-wrap gap-1">
+                                      {data.keywords.split(',').slice(0, 3).map((keyword, index) => (
+                                        <span 
+                                          key={index}
+                                          className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs"
+                                        >
+                                          #{keyword.trim()}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      })}
                     </div>
                   )}
                 </div>
