@@ -8,11 +8,11 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://your-domain.com'
 
 export const metadata: Metadata = {
   title: {
-    default: 'SEO Redirects Pro - Supercharge Your SEO & Backlinks with Smart Redirects',
+    default: 'SEO Redirects Pro - Instant Google Indexing & Traffic Boost',
     template: '%s | SEO Redirects Pro'
   },
-  description: 'Create powerful SEO-optimized redirections that get instantly indexed by Google, Bing & all major search engines. Perfect for affiliate marketers, bloggers, and content creators who want to dominate search results and drive 10x more traffic.',
-  keywords: ['SEO redirects', 'affiliate marketing', 'backlinks', 'search engine optimization', 'URL shortener', 'sitemap', 'indexing', 'crawler', 'content marketing', 'digital marketing', 'traffic generation', 'search rankings'],
+  description: 'Create SEO-optimized redirects that get indexed by Google in 24 hours. Boost organic traffic, improve rankings, and dominate search results with our professional redirect system.',
+  keywords: ['SEO redirects', 'Google indexing', 'organic traffic', 'search rankings', 'backlinks', 'URL shortener', 'sitemap optimization'],
   authors: [{ name: 'SEO Redirects Pro' }],
   creator: 'SEO Redirects Pro',
   publisher: 'SEO Redirects Pro',
@@ -32,25 +32,30 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: baseUrl,
     siteName: 'SEO Redirects Pro',
-    title: 'SEO Redirects Pro - Supercharge Your SEO & Backlinks with Smart Redirects',
-    description: 'Create powerful SEO-optimized redirections that get instantly indexed by Google, Bing & all major search engines. Perfect for affiliate marketers, bloggers, and content creators.',
+    title: 'SEO Redirects Pro - Instant Google Indexing & Traffic Boost',
+    description: 'Create SEO-optimized redirects that get indexed by Google in 24 hours. Boost organic traffic and dominate search results.',
     images: [
       {
         url: `${baseUrl}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: 'SEO Redirects Pro - Supercharge Your SEO & Backlinks',
+        alt: 'SEO Redirects Pro - Instant Google Indexing',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SEO Redirects Pro - Supercharge Your SEO & Backlinks with Smart Redirects',
-    description: 'Create powerful SEO-optimized redirections that get instantly indexed by Google, Bing & all major search engines. Perfect for affiliate marketers, bloggers, and content creators.',
+    title: 'SEO Redirects Pro - Instant Google Indexing & Traffic Boost',
+    description: 'Create SEO-optimized redirects that get indexed by Google in 24 hours. Boost organic traffic and dominate search results.',
     images: [`${baseUrl}/og-image.jpg`],
   },
   alternates: {
     canonical: baseUrl,
+  },
+  verification: {
+    google: 'your-google-verification-code',
+    yandex: 'your-yandex-verification-code',
+    yahoo: 'your-yahoo-verification-code',
   },
 }
 
@@ -73,12 +78,11 @@ export default function RootLayout({
           <GoogleAnalytics />
         </Suspense>
       </head>
-      <body className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-primary-50">
+      <body className="min-h-screen bg-white">
         <ToastProvider>
           {children}
         </ToastProvider>
         
-        {/* Enhanced JSON-LD Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -86,7 +90,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
               "name": "SEO Redirects Pro",
-              "description": "Create powerful SEO-optimized redirections that get instantly indexed by Google, Bing & all major search engines. Perfect for affiliate marketers, bloggers, and content creators.",
+              "description": "Create SEO-optimized redirects that get indexed by Google in 24 hours. Professional redirect system for boosting organic traffic.",
               "url": baseUrl,
               "applicationCategory": "SEO Tool",
               "operatingSystem": "Web",
@@ -104,34 +108,16 @@ export default function RootLayout({
                 "worstRating": "1"
               },
               "featureList": [
-                "Lightning Fast Google Indexing",
-                "Premium Backlink Power",
-                "Smart Meta Optimization",
-                "Zero Technical Skills Required",
-                "Analytics Ready",
-                "Enterprise Grade Security"
+                "24-Hour Google Indexing",
+                "SEO-Optimized Redirects",
+                "Automatic Sitemap Generation",
+                "Analytics Integration",
+                "Mobile-First Design"
               ],
-              "audience": {
-                "@type": "Audience",
-                "audienceType": [
-                  "Affiliate Marketers",
-                  "Content Creators",
-                  "Bloggers",
-                  "YouTubers",
-                  "Business Owners",
-                  "Digital Marketing Agencies",
-                  "SEO Professionals"
-                ]
-              },
               "provider": {
                 "@type": "Organization",
                 "name": "SEO Redirects Pro",
-                "url": baseUrl,
-                "logo": `${baseUrl}/logo.png`,
-                "sameAs": [
-                  "https://twitter.com/seoredirectspro",
-                  "https://linkedin.com/company/seoredirectspro"
-                ]
+                "url": baseUrl
               }
             })
           }}

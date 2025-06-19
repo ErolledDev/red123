@@ -27,20 +27,13 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
   const [mounted, setMounted] = useState(false)
   const hashtags = data.keywords ? data.keywords.split(',').map(k => k.trim()) : []
 
-  // Handle client-side mounting
   useEffect(() => {
     setMounted(true)
     if (typeof window !== 'undefined') {
       setCurrentUrl(window.location.href)
+      document.title = `${data.title} | SEO Redirects Pro`
     }
-  }, [])
-
-  // Update document title only on client side
-  useEffect(() => {
-    if (mounted && typeof document !== 'undefined') {
-      document.title = `${data.title} | seo360`
-    }
-  }, [data.title, mounted])
+  }, [data.title])
 
   const continueReading = () => {
     if (typeof window !== 'undefined') {
@@ -48,7 +41,6 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
     }
   }
 
-  // Don't show anything until mounted to prevent hydration issues
   if (!mounted) {
     return (
       <div className="min-h-screen bg-white flex flex-col">
@@ -58,8 +50,6 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
             <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
             <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
             <div className="h-64 bg-gray-200 rounded mb-8"></div>
-            <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
           </div>
         </main>
         <SimpleFooter />
@@ -72,39 +62,33 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
       <SimpleHeader />
       
       <main className="max-w-4xl mx-auto px-6 py-8 flex-grow">
-        {/* Article Header */}
-        <div className="mb-12">
-          {/* Article Meta */}
-          <div className="mb-6">
+        <article>
+          {/* Article Header */}
+          <header className="mb-12">
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600 mb-4">
-              <div className="flex items-center space-x-2">
-                <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">
-                  {data.type.charAt(0).toUpperCase() + data.type.slice(1)}
-                </span>
-                {data.site_name && (
-                  <>
-                    <span className="hidden sm:inline">•</span>
-                    <span className="text-gray-500 sm:text-gray-600">{data.site_name}</span>
-                  </>
-                )}
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="hidden sm:inline text-gray-400">•</span>
-                <span className="text-gray-500">
-                  {new Date().toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                  })}
-                </span>
-              </div>
+              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">
+                {data.type.charAt(0).toUpperCase() + data.type.slice(1)}
+              </span>
+              {data.site_name && (
+                <>
+                  <span className="hidden sm:inline">•</span>
+                  <span className="text-gray-500">{data.site_name}</span>
+                </>
+              )}
+              <span className="hidden sm:inline text-gray-400">•</span>
+              <time className="text-gray-500">
+                {new Date().toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}
+              </time>
             </div>
             
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
               {data.title}
             </h1>
             
-            {/* Keywords as tags */}
             {data.keywords && (
               <div className="flex flex-wrap gap-2 mb-8">
                 {data.keywords.split(',').map((keyword, index) => (
@@ -117,19 +101,18 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
                 ))}
               </div>
             )}
-          </div>
 
-          {/* Featured Image */}
-          {data.image && (
-            <div className="mb-8">
-              <img 
-                src={data.image} 
-                alt={data.title}
-                className="w-full h-64 sm:h-80 md:h-96 object-cover rounded-2xl shadow-lg"
-                loading="eager"
-              />
-            </div>
-          )}
+            {data.image && (
+              <div className="mb-8">
+                <img 
+                  src={data.image} 
+                  alt={data.title}
+                  className="w-full h-64 sm:h-80 md:h-96 object-cover rounded-2xl shadow-lg"
+                  loading="eager"
+                />
+              </div>
+            )}
+          </header>
           
           {/* Article Content */}
           <div className="prose prose-lg prose-gray max-w-none mb-8">
@@ -141,11 +124,11 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
           {/* Continue Reading CTA */}
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 sm:p-8 mb-8 border border-blue-100">
             <div className="text-center">
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
                 Want to Read the Full Article?
-              </h3>
+              </h2>
               <p className="text-gray-600 mb-6 text-base sm:text-lg">
-                Continue reading to discover more insights, detailed analysis, and actionable tips that can help you achieve your goals.
+                Continue reading to discover more insights, detailed analysis, and actionable tips.
               </p>
               <button
                 onClick={continueReading}
@@ -159,7 +142,7 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
             </div>
           </div>
 
-          {/* Single Social Share Component */}
+          {/* Social Share */}
           {mounted && currentUrl && (
             <div className="mb-12">
               <SocialShare
@@ -171,9 +154,9 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
               />
             </div>
           )}
-        </div>
+        </article>
 
-        {/* Related Posts Section */}
+        {/* Related Posts */}
         <RelatedPosts 
           allRedirects={allRedirects} 
           currentSlug={currentSlug}

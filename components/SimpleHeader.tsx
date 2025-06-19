@@ -13,11 +13,23 @@ export default function SimpleHeader() {
             </div>
             <div>
               <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                SEO Redirects
+                SEO Redirects Pro
               </h1>
-              <p className="text-xs text-gray-500">Professional SEO Tools</p>
+              <p className="text-xs text-gray-500">Instant Google Indexing</p>
             </div>
           </Link>
+          
+          <nav className="hidden sm:flex items-center space-x-6">
+            <Link href="/" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+              Home
+            </Link>
+            <Link href="/admin" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+              Admin
+            </Link>
+            <Link href="/sitemap.xml" target="_blank" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+              Sitemap
+            </Link>
+          </nav>
         </div>
       </div>
     </header>
