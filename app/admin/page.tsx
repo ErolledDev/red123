@@ -822,7 +822,7 @@ export default function AdminPage() {
                 
                 <div className="flex items-center space-x-2 mb-3">
                   <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
-                    {successData.data?.type.charAt(0).toUpperCase() + successData.data?.type.slice(1)}
+                    {successData.data?.type ? (successData.data.type.charAt(0).toUpperCase() + successData.data.type.slice(1)) : 'Article'}
                   </span>
                   {successData.data?.site_name && (
                     <>
