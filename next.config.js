@@ -1,33 +1,40 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // CRITICAL: Ensure SSR is enabled (no static export)
-  // output: 'export', // REMOVED - This forces static generation
-  
-  // Force SSR for all pages
-  experimental: {
-    // Ensure server components work properly
-    serverComponentsExternalPackages: [],
-  },
-  
-  // Optimize for production deployment
+  // Production optimizations
+  reactStrictMode: true,
+  swcMinify: true,
   poweredByHeader: false,
+  
+  // Compiler optimizations
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn']
+    } : false,
+  },
   
   // TypeScript configuration for build
   typescript: {
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors. Only use if you're confident about your types.
     ignoreBuildErrors: false,
   },
   
   // ESLint configuration
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
     ignoreDuringBuilds: false,
   },
   
-  // Image configuration for SSR
+  // Experimental features for performance
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['react-icons'],
+    serverComponentsExternalPackages: [],
+  },
+  
+  // Image optimization
   images: {
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 60,
+    dangerouslyAllowSVG: false,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       {
         protocol: 'https',
@@ -59,9 +66,10 @@ const nextConfig = {
   // Environment variable configuration
   env: {
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
   },
   
-  // Configure headers for better SEO and security
+  // Configure headers for security and performance
   async headers() {
     return [
       {
@@ -77,11 +85,19 @@ const nextConfig = {
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
+            value: 'strict-origin-when-cross-origin',
           },
           {
             key: 'X-DNS-Prefetch-Control',
             value: 'on',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
           },
         ],
       },
@@ -91,6 +107,10 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'no-cache, no-store, must-revalidate',
+          },
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow',
           },
         ],
       },
@@ -103,7 +123,7 @@ const nextConfig = {
           },
           {
             key: 'Cache-Control',
-            value: 'public, max-age=3600, s-maxage=3600',
+            value: 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
           },
         ],
       },
@@ -112,18 +132,27 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Type',
-            value: 'text/plain',
+            value: 'text/plain; charset=utf-8',
           },
           {
             key: 'Cache-Control',
-            value: 'public, max-age=86400',
+            value: 'public, max-age=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
           },
         ],
       },
     ]
   },
 
-  // Redirects for better SEO
+  // Redirects for SEO
   async redirects() {
     return [
       {
@@ -131,7 +160,6 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
-      // Redirect old API sitemap to new XML sitemap
       {
         source: '/api/sitemap',
         destination: '/sitemap.xml',
@@ -139,6 +167,22 @@ const nextConfig = {
       },
     ]
   },
+
+  // Bundle analyzer (only in development)
+  ...(process.env.ANALYZE === 'true' && {
+    webpack: (config, { isServer }) => {
+      if (!isServer) {
+        const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+        config.plugins.push(
+          new BundleAnalyzerPlugin({
+            analyzerMode: 'static',
+            openAnalyzer: false,
+          })
+        )
+      }
+      return config
+    },
+  }),
 }
 
 module.exports = nextConfig

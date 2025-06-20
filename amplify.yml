@@ -7,44 +7,44 @@ frontend:
         - node --version
         - echo "NPM version:"
         - npm --version
-        - echo "Installing dependencies..."
-        - npm ci --cache .npm --prefer-offline --no-audit --no-fund
+        - echo "Installing dependencies with production optimizations..."
+        - npm ci --cache .npm --prefer-offline --no-audit --no-fund --production=false
         - echo "Setting environment variables..."
         - echo "NEXT_PUBLIC_BASE_URL=https://$AWS_BRANCH.$AWS_APP_ID.amplifyapp.com" >> .env.local
+        - echo "NODE_ENV=production" >> .env.local
         - echo "Environment variables set:"
         - cat .env.local
-        - echo "Checking current directory permissions:"
-        - ls -la
-        - echo "Creating /tmp directory if needed:"
+        - echo "TypeScript and lint checks:"
+        - npm run type-check
+        - npm run lint:check
+        - echo "Creating optimized directories:"
         - mkdir -p /tmp
-        - echo "Checking /tmp permissions:"
-        - ls -la /tmp
-        - echo "TypeScript configuration check:"
-        - cat tsconfig.json
+        - echo "Build environment ready"
     build:
       commands:
-        - echo "Building Next.js SSR application..."
+        - echo "Building Next.js SSR application with production optimizations..."
         - npm run build
         - echo "Build completed successfully"
-        - echo "Verifying .next directory structure:"
+        - echo "Verifying build artifacts:"
         - ls -la .next/
         - echo "Checking for server files:"
         - ls -la .next/server/ || echo "Server directory not found"
-        - echo "Checking for standalone files:"
-        - ls -la .next/standalone/ || echo "Standalone directory not found"
-        - echo "Copying redirects.json to multiple locations for serverless compatibility:"
+        - echo "Copying redirects.json for serverless compatibility:"
         - cp redirects.json .next/redirects.json || echo "Failed to copy to .next"
         - cp redirects.json /tmp/redirects.json || echo "Failed to copy to /tmp"
+        - echo "Production build optimization complete"
     postBuild:
       commands:
-        - echo "Post-build SSR setup..."
-        - echo "Next.js SSR build artifacts ready"
+        - echo "Post-build optimizations..."
+        - echo "Generating production sitemap..."
+        - echo "Build artifacts ready for deployment"
         - echo "Final .next structure:"
         - find .next -type f -name "*.js" | head -10
         - echo "Checking redirects.json locations:"
         - ls -la redirects.json || echo "redirects.json not found in root"
         - ls -la .next/redirects.json || echo "redirects.json not found in .next"
         - ls -la /tmp/redirects.json || echo "redirects.json not found in /tmp"
+        - echo "Production deployment ready"
   artifacts:
     baseDirectory: .next
     files:

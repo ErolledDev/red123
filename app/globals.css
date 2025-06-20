@@ -11,6 +11,7 @@
   
   body {
     @apply text-gray-900 bg-white;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
   }
 
   *:focus {
@@ -21,26 +22,35 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Optimize font loading */
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200;
+    @apply bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
   }
   
   .btn-secondary {
-    @apply bg-white text-gray-700 border border-gray-300 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 hover:shadow-md transition-all duration-200;
+    @apply bg-white text-gray-700 border border-gray-300 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 hover:shadow-md transition-all duration-200 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
   }
 
   .btn-social {
-    @apply flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105;
+    @apply flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 focus:ring-2 focus:ring-offset-2;
   }
 
-  .btn-facebook { @apply bg-blue-600 text-white hover:bg-blue-700; }
-  .btn-twitter { @apply bg-sky-500 text-white hover:bg-sky-600; }
-  .btn-linkedin { @apply bg-blue-700 text-white hover:bg-blue-800; }
-  .btn-pinterest { @apply bg-red-600 text-white hover:bg-red-700; }
-  .btn-copy { @apply bg-gray-600 text-white hover:bg-gray-700; }
+  .btn-facebook { @apply bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500; }
+  .btn-twitter { @apply bg-sky-500 text-white hover:bg-sky-600 focus:ring-sky-500; }
+  .btn-linkedin { @apply bg-blue-700 text-white hover:bg-blue-800 focus:ring-blue-600; }
+  .btn-pinterest { @apply bg-red-600 text-white hover:bg-red-700 focus:ring-red-500; }
+  .btn-copy { @apply bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500; }
   
   .card {
     @apply bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg;
@@ -63,18 +73,66 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  /* Loading states */
+  .skeleton {
+    @apply animate-pulse bg-gray-200 rounded;
+  }
+
+  /* Performance optimizations */
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .will-change-opacity {
+    will-change: opacity;
+  }
 }
 
 @layer utilities {
+  /* Reduce motion for accessibility */
   @media (prefers-reduced-motion: reduce) {
     * {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .btn-primary {
+      @apply border-2 border-blue-800;
+    }
+    
+    .btn-secondary {
+      @apply border-2 border-gray-800;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+    
+    body {
+      @apply text-black bg-white;
     }
   }
 }
 
+/* Critical CSS for above-the-fold content */
+.hero-section {
+  contain: layout style paint;
+}
+
+.navigation {
+  contain: layout style;
+}
+
+/* Optimize animations */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -89,4 +147,16 @@
     transform: translateY(0); 
     opacity: 1; 
   }
+}
+
+@keyframes bounceSubtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Performance optimizations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
