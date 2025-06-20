@@ -125,8 +125,10 @@ export function extractKeywordsFromMarkdown(markdown: string, existingKeywords: 
   
   // Combine with existing keywords
   const existing = existingKeywords.split(',').map(k => k.trim()).filter(k => k)
-  const combined = [...existing, ...topWords]
-  const unique = [...new Set(combined)]
+  const combined = existing.concat(topWords)
+  
+  // Remove duplicates using Array.from and Set
+  const unique = Array.from(new Set(combined))
   
   return unique.slice(0, 10).join(', ')
 }

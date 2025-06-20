@@ -12,6 +12,20 @@ const nextConfig = {
   // Optimize for production deployment
   poweredByHeader: false,
   
+  // TypeScript configuration for build
+  typescript: {
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors. Only use if you're confident about your types.
+    ignoreBuildErrors: false,
+  },
+  
+  // ESLint configuration
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: false,
+  },
+  
   // Image configuration for SSR
   images: {
     remotePatterns: [
@@ -34,6 +48,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'vercel.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
       }
     ],
   },

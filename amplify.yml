@@ -19,6 +19,8 @@ frontend:
         - mkdir -p /tmp
         - echo "Checking /tmp permissions:"
         - ls -la /tmp
+        - echo "TypeScript configuration check:"
+        - cat tsconfig.json
     build:
       commands:
         - echo "Building Next.js SSR application..."
