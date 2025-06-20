@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { useToast } from '../../components/ToastContainer'
 import SimpleHeader from '../../components/SimpleHeader'
 import SimpleFooter from '../../components/SimpleFooter'
+import WysiwygEditor from '../../components/WysiwygEditor'
+import { stripHtmlForMeta, truncateForMeta } from '../../components/TextUtils'
 
 interface RedirectData {
   title: string
@@ -76,7 +78,7 @@ export default function AdminPage() {
         Object.entries(filtered).filter(([slug, data]) =>
           slug.toLowerCase().includes(searchTerm.toLowerCase()) ||
           data.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          data.desc.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          stripHtmlForMeta(data.desc).toLowerCase().includes(searchTerm.toLowerCase()) ||
           (data.keywords && data.keywords.toLowerCase().includes(searchTerm.toLowerCase())) ||
           (data.site_name && data.site_name.toLowerCase().includes(searchTerm.toLowerCase()))
         )
@@ -127,6 +129,11 @@ export default function AdminPage() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  // Special handler for WYSIWYG editor
+  const handleDescriptionChange = (value: string) => {
+    setFormData(prev => ({ ...prev, desc: value }))
   }
 
   const handleEdit = (slug: string, data: RedirectData) => {
@@ -283,7 +290,7 @@ export default function AdminPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Admin Panel</h1>
-          <p className="text-gray-600">Manage your SEO redirects with video support and boost your search engine visibility</p>
+          <p className="text-gray-600">Manage your SEO redirects with rich text descriptions and video support</p>
         </div>
 
         {/* Tab Navigation */}
@@ -339,7 +346,7 @@ export default function AdminPage() {
                   <p className="text-gray-600">
                     {editingSlug 
                       ? 'Update the details below to modify your existing redirect.'
-                      : 'Fill in the details below to create an SEO-optimized redirect with optional video content.'
+                      : 'Fill in the details below to create an SEO-optimized redirect with rich text descriptions and optional video content.'
                     }
                   </p>
                 </div>
@@ -380,21 +387,23 @@ export default function AdminPage() {
                   />
                 </div>
 
-                {/* Description */}
+                {/* Rich Text Description */}
                 <div className="lg:col-span-2">
                   <label htmlFor="desc" className="block text-sm font-medium text-gray-700 mb-2">
-                    Description *
+                    Description * 
+                    <span className="text-xs text-gray-500 ml-2">
+                      (Rich text editor - formatting will be preserved for display, plain text used for SEO)
+                    </span>
                   </label>
-                  <textarea
-                    id="desc"
-                    name="desc"
+                  <WysiwygEditor
                     value={formData.desc}
-                    onChange={handleInputChange}
-                    required
-                    rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
-                    placeholder="Write a compelling description that includes your target keywords"
+                    onChange={handleDescriptionChange}
+                    placeholder="Write a compelling description with rich formatting. Use bold, italic, lists, and more to make your content engaging."
+                    className="min-h-[120px]"
                   />
+                  <div className="mt-2 text-xs text-gray-500">
+                    <strong>SEO Preview:</strong> {truncateForMeta(formData.desc, 160)}
+                  </div>
                 </div>
 
                 {/* Target URL */}
@@ -430,7 +439,7 @@ export default function AdminPage() {
                   />
                 </div>
 
-                {/* Video URL - NEW FIELD */}
+                {/* Video URL */}
                 <div>
                   <label htmlFor="video" className="block text-sm font-medium text-gray-700 mb-2">
                     Video URL
@@ -650,10 +659,10 @@ export default function AdminPage() {
                   const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
                   const longUrl = `${baseUrl}/u?${new URLSearchParams({
                     title: data.title,
-                    desc: data.desc,
+                    desc: stripHtmlForMeta(data.desc), // Use plain text for URL params
                     url: data.url,
                     ...(data.image && { image: data.image }),
-                    ...(data.video && { video: data.video }), // Include video in URL params
+                    ...(data.video && { video: data.video }),
                     ...(data.keywords && { keywords: data.keywords }),
                     ...(data.site_name && { site_name: data.site_name }),
                     type: data.type
@@ -714,10 +723,12 @@ export default function AdminPage() {
                           {data.title}
                         </h3>
 
-                        {/* Description */}
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
-                          {data.desc}
-                        </p>
+                        {/* Description - Show rich text preview */}
+                        <div className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
+                          <div dangerouslySetInnerHTML={{ 
+                            __html: data.desc.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>')
+                          }} />
+                        </div>
 
                         {/* Keywords */}
                         {data.keywords && (
@@ -892,9 +903,11 @@ export default function AdminPage() {
                   {successData.data?.title}
                 </h4>
                 
-                <p className="text-gray-700 mb-4 line-clamp-3">
-                  {successData.data?.desc}
-                </p>
+                <div className="text-gray-700 mb-4 line-clamp-3">
+                  <div dangerouslySetInnerHTML={{ 
+                    __html: successData.data?.desc?.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>') || ''
+                  }} />
+                </div>
 
                 {successData.data?.keywords && (
                   <div className="flex flex-wrap gap-2">
@@ -958,6 +971,7 @@ export default function AdminPage() {
                   <li>• Share the short URL to start driving traffic</li>
                   <li>• Monitor performance in Google Search Console</li>
                   {successData.data?.video && <li>• Video content will enhance engagement and SEO</li>}
+                  <li>• Rich text formatting will improve user experience</li>
                 </ul>
               </div>
             </div>

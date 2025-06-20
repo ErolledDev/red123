@@ -7,6 +7,7 @@ import RelatedPosts from '../../components/RelatedPosts'
 import SimpleHeader from '../../components/SimpleHeader'
 import SimpleFooter from '../../components/SimpleFooter'
 import VideoPlayer from '../../components/VideoPlayer'
+import { formatRichTextForDisplay } from '../../components/TextUtils'
 
 interface RedirectData {
   title: string
@@ -152,10 +153,14 @@ function RedirectPageContent() {
             )}
           </header>
           
+          {/* Rich Text Content Display */}
           <div className="prose prose-sm sm:prose-lg prose-gray max-w-none mb-6 sm:mb-8">
-            <p className="text-base sm:text-lg lg:text-xl text-gray-700 leading-relaxed font-light">
-              {desc}
-            </p>
+            <div 
+              className="text-base sm:text-lg lg:text-xl text-gray-700 leading-relaxed font-light"
+              dangerouslySetInnerHTML={{ 
+                __html: formatRichTextForDisplay(desc)
+              }}
+            />
           </div>
 
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 border border-blue-100">
