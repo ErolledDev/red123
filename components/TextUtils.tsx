@@ -5,18 +5,28 @@
  */
 
 /**
- * Strips HTML tags and formatting from rich text to create clean meta descriptions
+ * Strips HTML tags and markdown formatting from text to create clean meta descriptions
  */
-export function stripHtmlForMeta(html: string): string {
-  return html
+export function stripHtmlForMeta(text: string): string {
+  return text
+    // Remove markdown formatting
+    .replace(/#{1,6}\s+/g, '') // Headers
+    .replace(/\*\*(.*?)\*\*/g, '$1') // Bold
+    .replace(/\*(.*?)\*/g, '$1') // Italic
+    .replace(/`(.*?)`/g, '$1') // Code
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Links
+    .replace(/^[-*+]\s+/gm, '') // List items
+    .replace(/^\d+\.\s+/gm, '') // Numbered lists
+    
+    // Remove HTML tags
     .replace(/<br\s*\/?>/gi, ' ')
     .replace(/<\/?(p|div|h[1-6]|li|ul|ol)[^>]*>/gi, ' ')
     .replace(/<[^>]*>/g, '')
     .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/"/g, '"')
     .replace(/&#39;/g, "'")
     .replace(/\s+/g, ' ')
     .trim()
@@ -41,21 +51,60 @@ export function truncateForMeta(text: string, maxLength: number = 160): string {
 }
 
 /**
- * Converts rich text to display HTML for rendering
+ * Converts markdown to display HTML for rendering
  */
-export function formatRichTextForDisplay(text: string): string {
-  return text
+export function formatMarkdownForDisplay(markdown: string): string {
+  return markdown
+    // Headers
+    .replace(/^### (.*$)/gim, '<h3 class="text-lg font-semibold text-gray-900 mb-2 mt-4">$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2 class="text-xl font-bold text-gray-900 mb-3 mt-6">$1</h2>')
+    .replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold text-gray-900 mb-4 mt-8">$1</h1>')
+    
+    // Bold and Italic
+    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em class="italic">$1</em>')
+    
+    // Code
+    .replace(/`(.*?)`/g, '<code class="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">$1</code>')
+    
+    // Links
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener noreferrer">$1</a>')
+    
+    // Lists - Process line by line to handle properly
+    .split('\n')
+    .map(line => {
+      // Unordered lists
+      if (line.match(/^[-*+]\s+/)) {
+        return `<li class="ml-4 mb-1">• ${line.replace(/^[-*+]\s+/, '')}</li>`
+      }
+      // Ordered lists
+      if (line.match(/^\d+\.\s+/)) {
+        return `<li class="ml-4 mb-1 list-decimal">${line.replace(/^\d+\.\s+/, '')}</li>`
+      }
+      return line
+    })
+    .join('\n')
+    
+    // Wrap consecutive list items
+    .replace(/((<li class="ml-4 mb-1">• .*?<\/li>\n?)+)/g, '<ul class="list-none space-y-1 mb-4">$1</ul>')
+    .replace(/((<li class="ml-4 mb-1 list-decimal">.*?<\/li>\n?)+)/g, '<ol class="list-decimal list-inside space-y-1 mb-4 ml-4">$1</ol>')
+    
+    // Line breaks and paragraphs
+    .replace(/\n\n/g, '</p><p class="mb-4">')
     .replace(/\n/g, '<br>')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/`(.*?)`/g, '<code class="bg-gray-100 px-1 py-0.5 rounded text-sm">$1</code>')
+    
+    // Wrap in paragraph if not already wrapped
+    .replace(/^(?!<[h1-6]|<ul|<ol|<p)(.+)/gm, '<p class="mb-4">$1</p>')
+    
+    // Clean up empty paragraphs
+    .replace(/<p class="mb-4"><\/p>/g, '')
 }
 
 /**
- * Extracts keywords from rich text content
+ * Extracts keywords from markdown content
  */
-export function extractKeywordsFromRichText(text: string, existingKeywords: string = ''): string {
-  const cleaned = stripHtmlForMeta(text)
+export function extractKeywordsFromMarkdown(markdown: string, existingKeywords: string = ''): string {
+  const cleaned = stripHtmlForMeta(markdown)
   const words = cleaned.toLowerCase()
     .replace(/[^\w\s]/g, ' ')
     .split(/\s+/)

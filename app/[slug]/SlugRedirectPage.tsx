@@ -5,7 +5,7 @@ import RelatedPosts from '../../components/RelatedPosts'
 import SimpleHeader from '../../components/SimpleHeader'
 import SimpleFooter from '../../components/SimpleFooter'
 import VideoPlayer from '../../components/VideoPlayer'
-import { formatRichTextForDisplay } from '../../components/TextUtils'
+import { formatMarkdownForDisplay } from '../../components/TextUtils'
 import { useEffect, useState } from 'react'
 
 interface RedirectData {
@@ -127,12 +127,12 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
             )}
           </header>
           
-          {/* Article Content - Rich Text Display */}
+          {/* Article Content - Markdown Display */}
           <div className="prose prose-sm sm:prose-lg prose-gray max-w-none mb-6 sm:mb-8">
             <div 
               className="text-base sm:text-lg lg:text-xl text-gray-700 leading-relaxed font-light"
               dangerouslySetInnerHTML={{ 
-                __html: formatRichTextForDisplay(data.desc)
+                __html: formatMarkdownForDisplay(data.desc)
               }}
             />
           </div>

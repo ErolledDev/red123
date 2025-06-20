@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useToast } from '../../components/ToastContainer'
 import SimpleHeader from '../../components/SimpleHeader'
 import SimpleFooter from '../../components/SimpleFooter'
-import WysiwygEditor from '../../components/WysiwygEditor'
+import MarkdownEditor from '../../components/MarkdownEditor'
 import { stripHtmlForMeta, truncateForMeta } from '../../components/TextUtils'
 
 interface RedirectData {
@@ -131,7 +131,7 @@ export default function AdminPage() {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  // Special handler for WYSIWYG editor
+  // Special handler for Markdown editor
   const handleDescriptionChange = (value: string) => {
     setFormData(prev => ({ ...prev, desc: value }))
   }
@@ -290,7 +290,7 @@ export default function AdminPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Admin Panel</h1>
-          <p className="text-gray-600">Manage your SEO redirects with rich text descriptions and video support</p>
+          <p className="text-gray-600">Manage your SEO redirects with markdown descriptions and video support</p>
         </div>
 
         {/* Tab Navigation */}
@@ -346,7 +346,7 @@ export default function AdminPage() {
                   <p className="text-gray-600">
                     {editingSlug 
                       ? 'Update the details below to modify your existing redirect.'
-                      : 'Fill in the details below to create an SEO-optimized redirect with rich text descriptions and optional video content.'
+                      : 'Fill in the details below to create an SEO-optimized redirect with markdown descriptions and optional video content.'
                     }
                   </p>
                 </div>
@@ -387,18 +387,18 @@ export default function AdminPage() {
                   />
                 </div>
 
-                {/* Rich Text Description */}
+                {/* Markdown Description */}
                 <div className="lg:col-span-2">
                   <label htmlFor="desc" className="block text-sm font-medium text-gray-700 mb-2">
                     Description * 
                     <span className="text-xs text-gray-500 ml-2">
-                      (Rich text editor - formatting will be preserved for display, plain text used for SEO)
+                      (Markdown editor - formatting will be preserved for display, plain text used for SEO)
                     </span>
                   </label>
-                  <WysiwygEditor
+                  <MarkdownEditor
                     value={formData.desc}
                     onChange={handleDescriptionChange}
-                    placeholder="Write a compelling description with rich formatting. Use bold, italic, lists, and more to make your content engaging."
+                    placeholder="Write a compelling description using Markdown. Use **bold**, *italic*, `code`, [links](url), # headers, and - lists to make your content engaging."
                     className="min-h-[120px]"
                   />
                   <div className="mt-2 text-xs text-gray-500">
@@ -723,7 +723,7 @@ export default function AdminPage() {
                           {data.title}
                         </h3>
 
-                        {/* Description - Show rich text preview */}
+                        {/* Description - Show markdown preview */}
                         <div className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
                           <div dangerouslySetInnerHTML={{ 
                             __html: data.desc.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>')
@@ -971,7 +971,7 @@ export default function AdminPage() {
                   <li>• Share the short URL to start driving traffic</li>
                   <li>• Monitor performance in Google Search Console</li>
                   {successData.data?.video && <li>• Video content will enhance engagement and SEO</li>}
-                  <li>• Rich text formatting will improve user experience</li>
+                  <li>• Markdown formatting will improve user experience</li>
                 </ul>
               </div>
             </div>

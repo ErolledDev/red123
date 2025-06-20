@@ -7,7 +7,7 @@ import RelatedPosts from '../../components/RelatedPosts'
 import SimpleHeader from '../../components/SimpleHeader'
 import SimpleFooter from '../../components/SimpleFooter'
 import VideoPlayer from '../../components/VideoPlayer'
-import { formatRichTextForDisplay } from '../../components/TextUtils'
+import { formatMarkdownForDisplay } from '../../components/TextUtils'
 
 interface RedirectData {
   title: string
@@ -153,12 +153,12 @@ function RedirectPageContent() {
             )}
           </header>
           
-          {/* Rich Text Content Display */}
+          {/* Markdown Content Display */}
           <div className="prose prose-sm sm:prose-lg prose-gray max-w-none mb-6 sm:mb-8">
             <div 
               className="text-base sm:text-lg lg:text-xl text-gray-700 leading-relaxed font-light"
               dangerouslySetInnerHTML={{ 
-                __html: formatRichTextForDisplay(desc)
+                __html: formatMarkdownForDisplay(desc)
               }}
             />
           </div>
