@@ -22,9 +22,9 @@ const nextConfig = {
     ignoreDuringBuilds: false,
   },
   
-  // Experimental features for performance
+  // Experimental features for performance - DISABLED optimizeCss for Amplify compatibility
   experimental: {
-    optimizeCss: true,
+    // optimizeCss: true, // Disabled - causes critters dependency issues in Amplify
     optimizePackageImports: ['react-icons'],
     serverComponentsExternalPackages: [],
   },
