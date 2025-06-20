@@ -6,12 +6,14 @@ import SocialShare from '../../components/SocialShare'
 import RelatedPosts from '../../components/RelatedPosts'
 import SimpleHeader from '../../components/SimpleHeader'
 import SimpleFooter from '../../components/SimpleFooter'
+import VideoPlayer from '../../components/VideoPlayer'
 
 interface RedirectData {
   title: string
   desc: string
   url: string
   image: string
+  video?: string // Added video support
   keywords: string
   site_name: string
   type: string
@@ -27,6 +29,7 @@ function RedirectPageContent() {
   const desc = searchParams.get('desc') || 'This is a redirect page'
   const url = searchParams.get('url') || '/'
   const image = searchParams.get('image') || ''
+  const video = searchParams.get('video') || '' // Get video from URL params
   const keywords = searchParams.get('keywords') || ''
   const siteName = searchParams.get('site_name') || ''
   const type = searchParams.get('type') || 'website'
@@ -93,6 +96,14 @@ function RedirectPageContent() {
               <span className="bg-blue-100 text-blue-700 px-2 sm:px-3 py-1 rounded-full font-medium text-xs sm:text-sm whitespace-nowrap">
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </span>
+              {video && (
+                <span className="bg-purple-100 text-purple-700 px-2 sm:px-3 py-1 rounded-full font-medium text-xs sm:text-sm whitespace-nowrap">
+                  <svg className="w-3 h-3 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2-10h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  Video Content
+                </span>
+              )}
               {siteName && (
                 <>
                   <span className="text-gray-400 hidden sm:inline">•</span>
@@ -128,7 +139,16 @@ function RedirectPageContent() {
               </div>
             )}
 
-            {image && (
+            {/* Video Player - Priority over image */}
+            {video ? (
+              <div className="mb-6 sm:mb-8">
+                <VideoPlayer
+                  videoUrl={video}
+                  title={title}
+                  className="w-full h-48 sm:h-64 md:h-80 lg:h-96"
+                />
+              </div>
+            ) : image && (
               <div className="mb-6 sm:mb-8">
                 <img 
                   src={image} 
@@ -149,19 +169,28 @@ function RedirectPageContent() {
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 border border-blue-100">
             <div className="text-center">
               <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
-                Want to Read the Full Article?
+                {video ? 'Want to Watch the Full Video?' : 'Want to Read the Full Article?'}
               </h2>
               <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base lg:text-lg">
-                Continue reading to discover more insights, detailed analysis, and actionable tips.
+                {video 
+                  ? 'Continue to the source to watch the complete video and discover more content.'
+                  : 'Continue reading to discover more insights, detailed analysis, and actionable tips.'
+                }
               </p>
               <button
                 onClick={continueReading}
                 className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-semibold text-sm sm:text-base lg:text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 inline-flex items-center"
               >
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-                Continue Reading
+                {video ? (
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2-10h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                )}
+                {video ? 'Watch Full Video' : 'Continue Reading'}
               </button>
             </div>
           </div>

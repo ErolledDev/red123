@@ -7,6 +7,7 @@ interface FormData {
   desc: string
   url: string
   image: string
+  video?: string // Added video field
   keywords: string
   site_name: string
   type: string
@@ -18,6 +19,7 @@ interface RedirectData {
   desc: string
   url: string
   image: string
+  video?: string // Added video field
   keywords: string
   site_name: string
   type: string
@@ -122,6 +124,7 @@ export async function POST(request: NextRequest) {
             desc: data.desc.trim(),
             url: data.url.trim(),
             image: data.image ? data.image.trim() : '',
+            video: data.video ? data.video.trim() : '', // Include video
             keywords: data.keywords ? data.keywords.trim() : '',
             site_name: data.site_name ? data.site_name.trim() : '',
             type: data.type || 'website',
@@ -135,6 +138,7 @@ export async function POST(request: NextRequest) {
             desc: redirectData.desc,
             url: redirectData.url,
             ...(redirectData.image && { image: redirectData.image }),
+            ...(redirectData.video && { video: redirectData.video }), // Include video in params
             ...(redirectData.keywords && { keywords: redirectData.keywords }),
             ...(redirectData.site_name && { site_name: redirectData.site_name }),
             type: redirectData.type
@@ -171,6 +175,7 @@ export async function POST(request: NextRequest) {
       desc: data.desc.trim(),
       url: data.url.trim(),
       image: data.image ? data.image.trim() : '',
+      video: data.video ? data.video.trim() : '', // Include video
       keywords: data.keywords ? data.keywords.trim() : '',
       site_name: data.site_name ? data.site_name.trim() : '',
       type: data.type || 'website',
@@ -196,6 +201,7 @@ export async function POST(request: NextRequest) {
         desc: redirectData.desc,
         url: redirectData.url,
         ...(redirectData.image && { image: redirectData.image }),
+        ...(redirectData.video && { video: redirectData.video }), // Include video in params
         ...(redirectData.keywords && { keywords: redirectData.keywords }),
         ...(redirectData.site_name && { site_name: redirectData.site_name }),
         type: redirectData.type
@@ -221,6 +227,7 @@ export async function POST(request: NextRequest) {
       desc: redirectData.desc,
       url: redirectData.url,
       ...(redirectData.image && { image: redirectData.image }),
+      ...(redirectData.video && { video: redirectData.video }), // Include video in params
       ...(redirectData.keywords && { keywords: redirectData.keywords }),
       ...(redirectData.site_name && { site_name: redirectData.site_name }),
       type: redirectData.type
@@ -237,7 +244,8 @@ export async function POST(request: NextRequest) {
       short: shortUrl,
       slug: slug,
       success: true,
-      isUpdate: isUpdate
+      isUpdate: isUpdate,
+      data: redirectData
     })
     
   } catch (error) {

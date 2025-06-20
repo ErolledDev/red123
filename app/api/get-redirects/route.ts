@@ -7,6 +7,7 @@ interface RedirectData {
   desc: string
   url: string
   image: string
+  video?: string // Added video field
   keywords: string
   site_name: string
   type: string

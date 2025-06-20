@@ -10,6 +10,7 @@ interface RedirectData {
   desc: string
   url: string
   image: string
+  video?: string // Added video field
   keywords: string
   site_name: string
   type: string
@@ -27,7 +28,7 @@ interface CreateRedirectResponse {
   slug: string
   success: boolean
   warning?: string
-  error?: string // Added missing error property
+  error?: string
   data?: RedirectData
   isUpdate?: boolean
 }
@@ -45,12 +46,13 @@ export default function AdminPage() {
   const [editingSlug, setEditingSlug] = useState<string | null>(null)
   const { showSuccess, showError, showConfirm } = useToast()
 
-  // Form state
+  // Form state - Added video field
   const [formData, setFormData] = useState({
     title: '',
     desc: '',
     url: '',
     image: '',
+    video: '', // New video field
     keywords: '',
     site_name: '',
     type: 'article',
@@ -133,6 +135,7 @@ export default function AdminPage() {
       desc: data.desc,
       url: data.url,
       image: data.image || '',
+      video: data.video || '', // Include video in edit
       keywords: data.keywords || '',
       site_name: data.site_name || '',
       type: data.type,
@@ -149,6 +152,7 @@ export default function AdminPage() {
       desc: '',
       url: '',
       image: '',
+      video: '', // Reset video field
       keywords: '',
       site_name: '',
       type: 'article',
@@ -179,6 +183,7 @@ export default function AdminPage() {
           desc: '',
           url: '',
           image: '',
+          video: '', // Reset video field
           keywords: '',
           site_name: '',
           type: 'article',
@@ -278,7 +283,7 @@ export default function AdminPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Admin Panel</h1>
-          <p className="text-gray-600">Manage your SEO redirects and boost your search engine visibility</p>
+          <p className="text-gray-600">Manage your SEO redirects with video support and boost your search engine visibility</p>
         </div>
 
         {/* Tab Navigation */}
@@ -334,7 +339,7 @@ export default function AdminPage() {
                   <p className="text-gray-600">
                     {editingSlug 
                       ? 'Update the details below to modify your existing redirect.'
-                      : 'Fill in the details below to create an SEO-optimized redirect that gets indexed fast.'
+                      : 'Fill in the details below to create an SEO-optimized redirect with optional video content.'
                     }
                   </p>
                 </div>
@@ -423,6 +428,26 @@ export default function AdminPage() {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                     placeholder="https://example.com/image.jpg"
                   />
+                </div>
+
+                {/* Video URL - NEW FIELD */}
+                <div>
+                  <label htmlFor="video" className="block text-sm font-medium text-gray-700 mb-2">
+                    Video URL
+                    <span className="text-xs text-gray-500 ml-2">(YouTube, Vimeo, TikTok, Direct links)</span>
+                  </label>
+                  <input
+                    type="url"
+                    id="video"
+                    name="video"
+                    value={formData.video}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="https://youtube.com/watch?v=... or https://example.com/video.mp4"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Supports: YouTube, Vimeo, TikTok, Dailymotion, or direct video file links (.mp4, .webm, .ogg)
+                  </p>
                 </div>
 
                 {/* Site Name */}
@@ -628,6 +653,7 @@ export default function AdminPage() {
                     desc: data.desc,
                     url: data.url,
                     ...(data.image && { image: data.image }),
+                    ...(data.video && { video: data.video }), // Include video in URL params
                     ...(data.keywords && { keywords: data.keywords }),
                     ...(data.site_name && { site_name: data.site_name }),
                     type: data.type
@@ -635,15 +661,27 @@ export default function AdminPage() {
 
                   return (
                     <div key={slug} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col">
-                      {/* Image */}
-                      {data.image && (
-                        <div className="aspect-video overflow-hidden flex-shrink-0">
-                          <img 
-                            src={data.image} 
-                            alt={data.title}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
+                      {/* Media Preview - Show video or image */}
+                      {(data.video || data.image) && (
+                        <div className="aspect-video overflow-hidden flex-shrink-0 bg-gray-100">
+                          {data.video ? (
+                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-100 to-blue-100">
+                              <div className="text-center">
+                                <svg className="w-12 h-12 text-purple-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2-10h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                <p className="text-sm font-medium text-purple-700">Video Content</p>
+                                <p className="text-xs text-purple-600">Click to view</p>
+                              </div>
+                            </div>
+                          ) : data.image && (
+                            <img 
+                              src={data.image} 
+                              alt={data.title}
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                          )}
                         </div>
                       )}
                       
@@ -651,9 +689,19 @@ export default function AdminPage() {
                       <div className="p-4 sm:p-6 flex flex-col flex-grow">
                         {/* Header */}
                         <div className="flex items-start justify-between mb-3">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            {data.type.charAt(0).toUpperCase() + data.type.slice(1)}
-                          </span>
+                          <div className="flex items-center space-x-2">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                              {data.type.charAt(0).toUpperCase() + data.type.slice(1)}
+                            </span>
+                            {data.video && (
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2-10h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                Video
+                              </span>
+                            )}
+                          </div>
                           {data.site_name && (
                             <span className="text-xs text-gray-500 truncate ml-2 max-w-24">
                               {data.site_name}
@@ -824,6 +872,14 @@ export default function AdminPage() {
                   <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
                     {successData.data?.type ? (successData.data.type.charAt(0).toUpperCase() + successData.data.type.slice(1)) : 'Article'}
                   </span>
+                  {successData.data?.video && (
+                    <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
+                      <svg className="w-3 h-3 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2-10h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                      Video
+                    </span>
+                  )}
                   {successData.data?.site_name && (
                     <>
                       <span className="text-gray-400">•</span>
@@ -901,6 +957,7 @@ export default function AdminPage() {
                   <li>• Search engines will discover it within 24-48 hours</li>
                   <li>• Share the short URL to start driving traffic</li>
                   <li>• Monitor performance in Google Search Console</li>
+                  {successData.data?.video && <li>• Video content will enhance engagement and SEO</li>}
                 </ul>
               </div>
             </div>
