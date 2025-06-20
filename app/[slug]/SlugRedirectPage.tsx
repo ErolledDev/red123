@@ -72,14 +72,6 @@ export default function SlugRedirectPage({ data, allRedirects, currentSlug }: Pr
               <span className="bg-blue-100 text-blue-700 px-2 sm:px-3 py-1 rounded-full font-medium text-xs sm:text-sm whitespace-nowrap">
                 {data.type.charAt(0).toUpperCase() + data.type.slice(1)}
               </span>
-              {data.video && (
-                <span className="bg-purple-100 text-purple-700 px-2 sm:px-3 py-1 rounded-full font-medium text-xs sm:text-sm whitespace-nowrap">
-                  <svg className="w-3 h-3 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2-10h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  Video Content
-                </span>
-              )}
               {data.site_name && (
                 <>
                   <span className="text-gray-500 text-xs sm:text-sm flex-1 min-w-0 truncate">
